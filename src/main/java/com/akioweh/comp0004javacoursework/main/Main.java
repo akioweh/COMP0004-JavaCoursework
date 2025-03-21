@@ -5,6 +5,8 @@ import org.apache.catalina.WebResourceRoot;
 import org.apache.catalina.startup.Tomcat;
 import org.apache.catalina.webresources.DirResourceSet;
 import org.apache.catalina.webresources.StandardRoot;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -24,7 +26,7 @@ public class Main {
     private static final String WEB_INF_CLASSES = "/WEB-INF/classes";
     private static final String LOGFILE = "logfile.txt";
 
-    private static Logger initLogger() {
+    private static @NotNull Logger initLogger() {
         Logger logger = Logger.getLogger(Main.class.getName());
         try {
             FileHandler fileHandler = new FileHandler(LOGFILE);
@@ -38,14 +40,13 @@ public class Main {
         return logger;
     }
 
-    private static Thread shutdownHook(final Tomcat app, final Logger logger) {
+    @Contract("_, _ -> new")
+    private static @NotNull Thread shutdownHook(final Tomcat app, final Logger logger) {
         return new Thread(() -> {
             try {
-                if (app != null) {
-                    app.stop();
-                    app.destroy();
-                    logger.info("Server closed.");
-                }
+                app.stop();
+                app.destroy();
+                logger.info("Server closed.");
             } catch (Exception e) {
                 logger.log(Level.SEVERE, "Error closing server ", e);
                 e.printStackTrace();
@@ -53,7 +54,7 @@ public class Main {
         });
     }
 
-    // run with Tomcat
+    // run with embedded Tomcat
     public static void main(String[] args) {
         final Logger logger = initLogger();
         final Path appDirectory = Paths.get(DEFAULT_WEBAPP_DIR);
@@ -66,12 +67,11 @@ public class Main {
 
         tomcat.setPort(DEFAULT_PORT);
         tomcat.getConnector();
-        // add a shutdown hook to *delete* Tomcat when the JVM exits
+        // add a shutdown hook to *eliminate* Tomcat when the JVM exits
         Runtime.getRuntime().addShutdownHook(shutdownHook(tomcat, logger));
 
+        // tell it where to find the webapp
         Context context = tomcat.addWebapp("", appDirectory.toAbsolutePath().toString());
-
-        // add the target classes to classpath
         WebResourceRoot resources = new StandardRoot(context);
         resources.addPreResources(new DirResourceSet(resources, WEB_INF_CLASSES,
                 targetClassesDirectory.toAbsolutePath().toString(), "/"));

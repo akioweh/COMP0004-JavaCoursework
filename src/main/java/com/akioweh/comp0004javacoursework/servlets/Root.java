@@ -9,8 +9,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 
-@WebServlet(name = "helloServlet", value = "/hello-servlet")
-public class MainServlet extends HttpServlet {
+@WebServlet(name = "root", urlPatterns = "")
+public class Root extends HttpServlet {
     private String message;
 
     public void init() {
