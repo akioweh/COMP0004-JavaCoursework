@@ -12,6 +12,7 @@ import java.net.URI;
  * Note: we're using URI objects instead of URLs
  * because URLs are too restrictive.
  * (e.g., they don't allow relative paths)
+ * </p>
  */
 public class LinkElement extends NoteElement {
     private @NotNull URI uri;

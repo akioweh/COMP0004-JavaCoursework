@@ -5,6 +5,13 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Base form for all note elements.
+ * <p>
+ * Note elements are the building blocks of a note.
+ * They can be text, links, images, etc.
+ * </p>
+ */
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
         include = JsonTypeInfo.As.PROPERTY,
