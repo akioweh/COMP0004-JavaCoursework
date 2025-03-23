@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.net.URI;
 
+
 /**
  * Represents a linked (nonlocal) resource.
  * Can be an internal link to another note,

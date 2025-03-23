@@ -2,6 +2,7 @@ package com.akioweh.comp0004javacoursework.models;
 
 import org.jetbrains.annotations.NotNull;
 
+
 /**
  * Represents a note element that is just plain text.
  * <p>

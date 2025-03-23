@@ -5,7 +5,13 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.Vector;
+
 
 /**
  * Base form for all notes.
@@ -13,15 +19,15 @@ import java.util.*;
  */
 public class Note extends UUIO {
     @NotNull
+    private final Date created = new Date();
+    private final Set<String> tags = new HashSet<>();
+    private final List<NoteElement> elements = new Vector<>();
+    @NotNull
     private String title;
     @NotNull
     private String brief;
     @NotNull
-    private final Date created = new Date();
-    @NotNull
     private Date modified = new Date();
-    private final Set<String> tags = new HashSet<>();
-    private final List<NoteElement> elements = new Vector<>();
 
     public Note(@NotNull String title, @NotNull String brief, @NotNull Vector<String> tags) {
         this.title = title;
@@ -90,11 +96,6 @@ public class Note extends UUIO {
         return res;
     }
 
-    public void insertElement(int index, @NotNull NoteElement element) {
-        elements.add(index, element);
-        modified = new Date();
-    }
-
     public void insertElement(@Nullable NoteElement before, @NotNull NoteElement element) {
         int index = before == null ? elements.size() : elements.indexOf(before);
         if (index == -1) {
@@ -103,8 +104,8 @@ public class Note extends UUIO {
         insertElement(index, element);
     }
 
-    public void removeElement(int index) {
-        elements.remove(index);
+    public void insertElement(int index, @NotNull NoteElement element) {
+        elements.add(index, element);
         modified = new Date();
     }
 
@@ -114,6 +115,11 @@ public class Note extends UUIO {
             throw new IllegalArgumentException("Element not found: " + element);
         }
         removeElement(index);
+    }
+
+    public void removeElement(int index) {
+        elements.remove(index);
+        modified = new Date();
     }
 
 }

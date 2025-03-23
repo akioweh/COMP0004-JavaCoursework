@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 import java.util.UUID;
 
+
 /**
  * Universally Uniquely Identifiable Object / Universal Unrestricted IO.
  * (master of funny)
