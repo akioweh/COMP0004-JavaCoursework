@@ -29,14 +29,22 @@ public class Engine {
     private final StorageHandler storageHandler;
     private final HashMap<UUID, Note> noteCache = new HashMap<>();
     private final HashMap<UUID, Index> indexCache = new HashMap<>();
+    /**
+     * The root index is the top-level index.
+     * It always exists, cannot be deleted or manually modified,
+     * and keeps track of all existing indexes and notes.
+     */
+    @NotNull
+    private final UUID rootIndexUuid;
 
-    private Engine(String localStoragePath, String localMediaStoragePath) {
+    private Engine(String localStoragePath, String localMediaStoragePath, @NotNull UUID rootIndexUuid) {
         this.storageHandler = new StorageHandler(localStoragePath, localMediaStoragePath);
+        this.rootIndexUuid = rootIndexUuid;
     }
 
-    public static void init(String localStoragePath, String localMediaStoragePath) {
+    public static void init(String localStoragePath, String localMediaStoragePath, UUID rootIndexUuid) {
         if (instance == null) {
-            instance = new Engine(localStoragePath, localMediaStoragePath);
+            instance = new Engine(localStoragePath, localMediaStoragePath, rootIndexUuid);
         } else {
             throw new IllegalStateException("Engine is already initialized");
         }
@@ -62,7 +70,7 @@ public class Engine {
         if (object != null) {
             return object;
         }
-        object = storageHandler.get(uuid);
+        object = storageHandler.read(uuid);
         if (object != null) {
             if (object instanceof Note note) {
                 noteCache.put(note.getUuid(), note);
@@ -77,12 +85,20 @@ public class Engine {
         return noteCache.containsKey(uuid) || indexCache.containsKey(uuid) || storageHandler.exists(uuid);
     }
 
+    public Index getRootIndex() {
+        return getIndex(rootIndexUuid);
+    }
+
+    public void saveRootIndex() {
+        saveIndex(rootIndexUuid);
+    }
+
     public Note getNote(@NotNull UUID uuid) {
         var note = noteCache.get(uuid);
         if (note != null) {
             return note;
         }
-        note = storageHandler.getNote(uuid);
+        note = storageHandler.readNote(uuid);
         if (note != null) {
             noteCache.put(uuid, note);
         }
@@ -94,6 +110,9 @@ public class Engine {
             throw new IllegalStateException("Note already exists");
         }
         noteCache.put(note.getUuid(), note);
+        storageHandler.writeNote(note);
+        getRootIndex().addEntry(note);
+        saveRootIndex();
     }
 
     public void saveNote(@NotNull UUID noteUuid) {
@@ -101,7 +120,7 @@ public class Engine {
         if (note == null) {
             throw new IllegalStateException("Note not found in cache");
         }
-        storageHandler.saveNote(note);
+        storageHandler.writeNote(note);
     }
 
     public void deleteNote(@NotNull UUID noteUuid) {
@@ -110,6 +129,8 @@ public class Engine {
         }
         noteCache.remove(noteUuid);
         storageHandler.deleteNote(noteUuid);
+        getRootIndex().removeEntry(noteUuid);
+        saveRootIndex();
     }
 
     public Index getIndex(@NotNull UUID uuid) {
@@ -117,7 +138,7 @@ public class Engine {
         if (index != null) {
             return index;
         }
-        index = storageHandler.getIndex(uuid);
+        index = storageHandler.readIndex(uuid);
         if (index != null) {
             indexCache.put(uuid, index);
         }
@@ -129,6 +150,9 @@ public class Engine {
             throw new IllegalStateException("Index already exists");
         }
         indexCache.put(index.getUuid(), index);
+        storageHandler.writeIndex(index);
+        getRootIndex().addEntry(index);
+        saveRootIndex();
     }
 
     public void saveIndex(@NotNull UUID indexUuid) {
@@ -136,19 +160,24 @@ public class Engine {
         if (index == null) {
             throw new IllegalStateException("Index not found in cache");
         }
-        storageHandler.saveIndex(index);
+        storageHandler.writeIndex(index);
     }
 
     public void deleteIndex(@NotNull UUID indexUuid) {
         if (!exists(indexUuid)) {
             throw new IllegalStateException("Index does not exist");
         }
+        if (indexUuid.equals(rootIndexUuid)) {
+            throw new IllegalStateException("Cannot delete root index");
+        }
         indexCache.remove(indexUuid);
         storageHandler.deleteIndex(indexUuid);
+        getRootIndex().removeEntry(indexUuid);
+        saveRootIndex();
     }
 
     public void saveAll() {
-        noteCache.values().forEach(storageHandler::saveNote);
-        indexCache.values().forEach(storageHandler::saveIndex);
+        noteCache.values().forEach(storageHandler::writeNote);
+        indexCache.values().forEach(storageHandler::writeIndex);
     }
 }

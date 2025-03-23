@@ -50,7 +50,7 @@ public class StorageHandler {
         }
     }
 
-    public UUIO get(@NotNull UUID uuid) {
+    public UUIO read(@NotNull UUID uuid) {
         String fileName = uuid + ".json";
         Path filePath = localStoragePath.resolve(fileName);
         if (!filePath.toFile().exists()) {
@@ -66,7 +66,7 @@ public class StorageHandler {
         }
     }
 
-    public void save(@NotNull UUIO data) {
+    public void write(@NotNull UUIO data) {
         String fileName = data.getUuid() + ".json";
         Path filePath = localStoragePath.resolve(fileName);
         try {
@@ -95,24 +95,24 @@ public class StorageHandler {
         return filePath.toFile().exists();
     }
 
-    public Note getNote(@NotNull UUID uuid) {
-        return (Note) get(uuid);
+    public Note readNote(@NotNull UUID uuid) {
+        return (Note) read(uuid);
     }
 
-    public void saveNote(@NotNull Note note) {
-        save(note);
+    public void writeNote(@NotNull Note note) {
+        write(note);
     }
 
     public void deleteNote(@NotNull UUID uuid) {
         delete(uuid);
     }
 
-    public Index getIndex(@NotNull UUID uuid) {
-        return (Index) get(uuid);
+    public Index readIndex(@NotNull UUID uuid) {
+        return (Index) read(uuid);
     }
 
-    public void saveIndex(@NotNull Index index) {
-        save(index);
+    public void writeIndex(@NotNull Index index) {
+        write(index);
     }
 
     public void deleteIndex(@NotNull UUID uuid) {

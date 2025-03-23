@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 
-@WebServlet(name = "root", urlPatterns = "")
+@WebServlet(name = "root", urlPatterns = "/2")
 public class Root extends HttpServlet {
     private String message;
 
