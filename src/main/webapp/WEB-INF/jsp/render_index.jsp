@@ -2,14 +2,14 @@
   Author: akioweh
   23/03/2025 7:35 am
 --%>
-<%--@elvariable id="obj" type="com.akioweh.comp0004javacoursework.engine.Index"--%>
+<%--@elvariable id="obj" type="com.akioweh.comp0004javacoursework.models.Index"--%>
 <%@ page contentType="text/html;charset=UTF-8" %>
-<%@ page import="com.akioweh.comp0004javacoursework.engine.Index" %>
+<%@ page import="com.akioweh.comp0004javacoursework.models.Index" %>
 <%@ page import="com.akioweh.comp0004javacoursework.models.Note" %>
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Index Details</title>
+    <title>Notes App | Index View</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/style.css">
 </head>
 <body>
