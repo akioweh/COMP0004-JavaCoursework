@@ -15,7 +15,7 @@ import java.net.URI;
  * (e.g., they don't allow relative paths)
  * </p>
  */
-public class LinkElement extends NoteElement {
+public sealed class LinkElement extends NoteElement permits MediaElement {
     private @NotNull URI uri;
     private @NotNull String displayText;
 

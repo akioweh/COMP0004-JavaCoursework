@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
  * They can be text, links, images, etc.
  * </p>
  */
-public abstract class NoteElement extends UUIO {
+public sealed abstract class NoteElement extends UUIO permits TextElement, LinkElement {
     /**
      * Used to populate HTML with section ids,
      * so we can reference specific sections in URLs.

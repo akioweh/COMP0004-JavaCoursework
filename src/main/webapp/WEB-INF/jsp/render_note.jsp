@@ -1,14 +1,12 @@
-<%@ page import="com.akioweh.comp0004javacoursework.models.Note" %>
-<%@ page import="com.akioweh.comp0004javacoursework.models.NoteElement" %>
-<%@ page import="com.akioweh.comp0004javacoursework.renderer.ElementRenderer" %>
-<%@ page import="com.akioweh.comp0004javacoursework.renderer.RendererFactory" %>
-<%@ page import="javax.swing.text.Element" %><%--
-Author: akioweh
-24/03/2025 2:27 am
+<%--
+  Author: akioweh
+  24/03/2025 2:27 am
 --%>
 <%--@elvariable id="note" type="com.akioweh.comp0004javacoursework.models.Note"--%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<% Note note = (Note) request.getAttribute("note"); %>
+<%@ page import="com.akioweh.comp0004javacoursework.models.Note" %>
+<%@ page import="com.akioweh.comp0004javacoursework.renderer.AutoRenderer" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
+<% var note = (Note) request.getAttribute("note"); %>
 <html>
 <head>
     <jsp:include page="meta.jsp"/>
@@ -36,7 +34,7 @@ Author: akioweh
             </div>
             <div id="tags-list">
                 <ul>
-                    <% for (String tag : note.getTags().stream().sorted().toList()) { %>
+                    <% for (var tag : note.getTags().stream().sorted().toList()) { %>
                     <li>
                         <%= tag %>
                     </li>
@@ -50,13 +48,12 @@ Author: akioweh
         <hr>
         <div id="note-content">
             <%
-                for (NoteElement element : note.getElements()) {
-                    ElementRenderer<? extends NoteElement> renderer = RendererFactory.getRenderer(element.getClass());
+                for (var element : note.getElements()) {
             %>
             <div class="note-element">
-                <%= renderer.render(element) %>
+                <%= AutoRenderer.render(element) %>
             </div>
-
+            <% } %>
         </div>
 
     </div>

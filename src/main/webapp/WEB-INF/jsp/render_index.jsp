@@ -5,12 +5,11 @@
 <%--@elvariable id="obj" type="com.akioweh.comp0004javacoursework.models.Index"--%>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ page import="com.akioweh.comp0004javacoursework.models.Index" %>
-<%@ page import="com.akioweh.comp0004javacoursework.models.Note" %>
-<% Index index = (Index) request.getAttribute("obj"); %>
+<% var index = (Index) request.getAttribute("obj"); %>
 <!DOCTYPE html>
 <html>
 <head>
-    <jsp:include page="meta.jsp" />
+    <jsp:include page="meta.jsp"/>
     <title>Notes App | Index View</title>
 </head>
 <body>
@@ -33,24 +32,20 @@
         <h3>Note Entries:</h3>
         <div class="entries-notes">
             <ol>
-                <%
-                    for (Note entry : index.getNotes()) {
-                %>
+                <% for (var entry : index.getNotes()) { %>
                 <li>
                     <a href="note/<%= entry.getUuid() %>">
                         <%= entry.getTitle() %>
                     </a>
                 </li>
-                <%
-                    }
-                %>
+                <% } %>
             </ol>
         </div>
         <h3>Index Entries</h3>
         <div class="entries-indexes">
             <ol>
                 <%
-                    for (Index entry : index.getIndexes()) {
+                    for (var entry : index.getIndexes()) {
                         if (entry.equals(index)) continue;  // don't include self
                 %>
                 <li>
@@ -58,13 +53,11 @@
                         <%= entry.getName() %>
                     </a>
                 </li>
-                <%
-                    }
-                %>
+                <% } %>
             </ol>
         </div>
     </div>
 </div>
-<jsp:include page="footer.jsp" />
+<jsp:include page="footer.jsp"/>
 </body>
 </html>

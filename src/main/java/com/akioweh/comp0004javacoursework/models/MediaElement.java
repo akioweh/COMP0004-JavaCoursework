@@ -9,7 +9,7 @@ import java.net.URI;
  * Wraps a linked resource
  * to render an embed/preview of it.
  */
-public class MediaElement extends LinkElement {
+public final class MediaElement extends LinkElement {
     @NotNull
     private MediaType mediaType;
 

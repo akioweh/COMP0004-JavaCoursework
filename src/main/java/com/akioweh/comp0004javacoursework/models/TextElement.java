@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
  * depending on the subclass or other properties.
  * </p>
  */
-public class TextElement extends NoteElement {
+public sealed class TextElement extends NoteElement permits HTMLElement {
     private @NotNull String content;
 
     public TextElement(@NotNull String content) {
