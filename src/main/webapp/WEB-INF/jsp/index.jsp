@@ -45,11 +45,11 @@
             </li>
             <% } %>
         </ol>
-        <h2>
-            <a href="index">
-                All Notes
+        <h3>
+            <a href="${pageContext.request.contextPath}/index">
+                All Notes and Indexes
             </a>
-        </h2>
+        </h3>
     </div>
 </div>
 <jsp:include page="footer.jsp"/>

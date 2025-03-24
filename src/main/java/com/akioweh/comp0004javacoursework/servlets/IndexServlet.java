@@ -1,6 +1,7 @@
 package com.akioweh.comp0004javacoursework.servlets;
 
 import com.akioweh.comp0004javacoursework.engine.Engine;
+import com.akioweh.comp0004javacoursework.models.Index;
 import com.akioweh.comp0004javacoursework.util.Util;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -11,6 +12,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.UUID;
 
 
@@ -22,8 +24,8 @@ public class IndexServlet extends HttpServlet {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "Index not found");
             return;
         }
-        request.setAttribute("obj", index);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/jsp/render_index.jsp");
+        request.setAttribute("index", index);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/render_index.jsp");
         dispatcher.forward(request, response);
     }
 
@@ -49,5 +51,21 @@ public class IndexServlet extends HttpServlet {
             // render the index
             renderIndex(request, response, uuid);
         }
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        var engine = Engine.getInstance();
+        var pathInfo = request.getPathInfo();
+        if (pathInfo != null) {
+            // not allowed; post is for new indexes only
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST,
+                    "Invalid request. POST is for new indexes only; UUID not allowed.");
+            return;
+        }
+        var newIndex = new Index();
+        newIndex.setName("New Index");
+        newIndex.setDescription("New Index on" + new Date());
+        response.sendRedirect(request.getContextPath() + "/index/" + newIndex.getUuid());
     }
 }

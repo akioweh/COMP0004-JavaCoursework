@@ -15,7 +15,7 @@
 <body>
 <header>
     <div class="container">
-        <h1>Notes App</h1>
+        <h1>Note View</h1>
         <nav>
             <ul>
                 <li><a href="${pageContext.request.contextPath}/">Home</a></li>

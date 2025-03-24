@@ -2,10 +2,10 @@
   Author: akioweh
   23/03/2025 7:35 am
 --%>
-<%--@elvariable id="obj" type="com.akioweh.comp0004javacoursework.models.Index"--%>
+<%--@elvariable id="index" type="com.akioweh.comp0004javacoursework.models.Index"--%>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ page import="com.akioweh.comp0004javacoursework.models.Index" %>
-<% var index = (Index) request.getAttribute("obj"); %>
+<% var index = (Index) request.getAttribute("index"); %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -26,8 +26,8 @@
 <div class="container">
     <div class="main">
         <div class="index-details">
-            <h2>${obj.name}</h2>
-            <p><strong>Description:</strong> ${obj.description}</p>
+            <h2>${index.name}</h2>
+            <p><strong>Description:</strong> ${index.description}</p>
         </div>
         <h3>Note Entries:</h3>
         <div class="entries-notes">
