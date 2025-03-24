@@ -5,14 +5,15 @@ import com.akioweh.comp0004javacoursework.models.LinkElement;
 import com.akioweh.comp0004javacoursework.models.MediaElement;
 import com.akioweh.comp0004javacoursework.models.NoteElement;
 import com.akioweh.comp0004javacoursework.models.TextElement;
+import org.jetbrains.annotations.NotNull;
 
 
 /**
  * gets the correct renderer for a given element type.
  */
 public class RendererFactory {
-    @SuppressWarnings("unchecked")
-    public static <T extends NoteElement> ElementRenderer<T> getRenderer(Class<T> elementClass) {
+    @SuppressWarnings("unchecked")  // we know the type is correct
+    public static <T extends NoteElement> @NotNull ElementRenderer<T> getRenderer(Class<T> elementClass) {
         if (TextElement.class.isAssignableFrom(elementClass)) {
             return (ElementRenderer<T>) TextRenderer.getInstance();
         } else if (HTMLElement.class.isAssignableFrom(elementClass)) {

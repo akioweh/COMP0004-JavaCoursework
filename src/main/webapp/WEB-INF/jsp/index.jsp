@@ -8,8 +8,8 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
+    <jsp:include page="meta.jsp" />
     <title>Notes App | Home</title>
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/style.css">
 </head>
 <body>
 <header>
@@ -59,8 +59,6 @@
         </h2>
     </div>
 </div>
-<footer>
-    <p>&copy; 2025 Akioweh</p>
-</footer>
+<jsp:include page="footer.jsp" />
 </body>
 </html>

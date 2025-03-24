@@ -121,4 +121,11 @@ public class Note extends UUIO {
         modified = new Date();
     }
 
+    public Date getCreatedDate() {
+        return created;
+    }
+
+    public Date getModifiedDate() {
+        return modified;
+    }
 }

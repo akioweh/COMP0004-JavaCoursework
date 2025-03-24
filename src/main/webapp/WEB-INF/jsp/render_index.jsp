@@ -6,11 +6,12 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ page import="com.akioweh.comp0004javacoursework.models.Index" %>
 <%@ page import="com.akioweh.comp0004javacoursework.models.Note" %>
+<% Index index = (Index) request.getAttribute("obj"); %>
 <!DOCTYPE html>
 <html>
 <head>
+    <jsp:include page="meta.jsp" />
     <title>Notes App | Index View</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/style.css">
 </head>
 <body>
 <header>
@@ -33,7 +34,6 @@
         <div class="entries-notes">
             <ol>
                 <%
-                    Index index = (Index) request.getAttribute("obj");
                     for (Note entry : index.getNotes()) {
                 %>
                 <li>
@@ -65,8 +65,6 @@
         </div>
     </div>
 </div>
-<footer>
-    <p>&copy; 2025 Akioweh</p>
-</footer>
+<jsp:include page="footer.jsp" />
 </body>
 </html>

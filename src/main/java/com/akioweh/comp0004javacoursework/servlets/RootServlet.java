@@ -1,6 +1,5 @@
 package com.akioweh.comp0004javacoursework.servlets;
 
-import com.akioweh.comp0004javacoursework.engine.Engine;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
