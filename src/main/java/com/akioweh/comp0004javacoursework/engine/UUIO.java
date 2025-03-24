@@ -1,7 +1,8 @@
 package com.akioweh.comp0004javacoursework.engine;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.akioweh.comp0004javacoursework.models.Note;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.jetbrains.annotations.NotNull;
 
@@ -19,7 +20,10 @@ import java.util.UUID;
         include = JsonTypeInfo.As.PROPERTY,
         property = "type"
 )
-@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = Index.class, name = "index"),
+        @JsonSubTypes.Type(value = Note.class, name = "note"),
+})
 public abstract class UUIO {
     @JsonProperty("uuid")
     private final UUID uuid = UUID.randomUUID();

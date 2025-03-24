@@ -3,4 +3,12 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
          version="6.0">
+    <context-param>
+        <param-name>localStorageRoot</param-name>
+        <param-value>data/</param-value>
+    </context-param>
+
+    <listener>
+        <listener-class>com.akioweh.comp0004javacoursework.main.StartupListener</listener-class>
+    </listener>
 </web-app>

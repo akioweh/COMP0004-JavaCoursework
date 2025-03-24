@@ -1,7 +1,5 @@
 package com.akioweh.comp0004javacoursework.main;
 
-import com.akioweh.comp0004javacoursework.engine.Engine;
-import com.akioweh.comp0004javacoursework.engine.Index;
 import org.apache.catalina.Context;
 import org.apache.catalina.WebResourceRoot;
 import org.apache.catalina.startup.Tomcat;
@@ -14,7 +12,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.UUID;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,7 +24,6 @@ public class Main {
     private static final String DEFAULT_TARGET_CLASSES = "target/classes";
     private static final String WEB_INF_CLASSES = "/WEB-INF/classes";
     private static final String LOGFILE = "logfile.txt";
-    private static final String LOCAL_STORAGE_ROOT = "data/";
 
     // run with embedded Tomcat
     public static void main(String[] args) {
@@ -37,9 +33,6 @@ public class Main {
 
         assert Files.exists(appDirectory) : "Webapp directory does not exist: " + appDirectory;
         assert Files.exists(targetClassesDirectory) : "Target classes directory does not exist: " + targetClassesDirectory;
-
-        // initialize Engine with paths (singleton model manager)
-        initStorage();
 
         final Tomcat tomcat = new Tomcat();
 
@@ -90,44 +83,5 @@ public class Main {
                 logger.log(Level.SEVERE, e.getMessage(), e);
             }
         });
-    }
-
-    private static void initStorage() {
-        // localStorage is in ROOT/json
-        // localMediaStorage is in ROOT/media
-        // search ROOT/rootIndex.id for the UUID of the root index
-        var logger = Logger.getLogger(Main.class.getName());
-        var rootPath = Paths.get(LOCAL_STORAGE_ROOT);
-        if (!rootPath.toFile().exists()) {
-            try {
-                Files.createDirectories(rootPath);
-            } catch (IOException e) {
-                throw new RuntimeException("Failed to create local storage root directory: " + rootPath, e);
-            }
-        }
-        var rootIndexPath = rootPath.resolve("rootIndex.id");
-        if (!rootIndexPath.toFile().exists()) {
-            // doesn't exist; initialize the root index
-            try {
-                logger.info("Did not find root index pointer; assuming empty storage. Initializing...");
-                Files.createFile(rootIndexPath);
-                var rootIndex = new Index("Root", "Collection of all existing notes and indexes");
-                var rootIndexUuid = rootIndex.getUuid();
-                Files.writeString(rootIndexPath, rootIndexUuid.toString());
-                Engine.init(LOCAL_STORAGE_ROOT, LOCAL_STORAGE_ROOT, rootIndexUuid);
-                Engine.getInstance().addIndex(rootIndex);
-                Engine.getInstance().saveAll();
-            } catch (IOException e) {
-                throw new RuntimeException("Failed to create root index file: " + rootIndexPath, e);
-            }
-        } else {
-            // all good; read file to determine root and initialize engine
-            try {
-                var rootIndexUuid = UUID.fromString(Files.readString(rootIndexPath));
-                Engine.init(LOCAL_STORAGE_ROOT, LOCAL_STORAGE_ROOT, rootIndexUuid);
-            } catch (IOException | IllegalArgumentException e) {
-                throw new RuntimeException("Failed to determine root index UUID from " + rootIndexPath, e);
-            }
-        }
     }
 }

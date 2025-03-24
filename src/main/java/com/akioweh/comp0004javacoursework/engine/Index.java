@@ -1,5 +1,7 @@
 package com.akioweh.comp0004javacoursework.engine;
 
+import com.akioweh.comp0004javacoursework.models.Note;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnmodifiableView;
 
@@ -12,6 +14,11 @@ import java.util.stream.Stream;
 /**
  * Class to aggregate a given collection of notes and other indices.
  */
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.PROPERTY,
+        property = "type"
+)
 public class Index extends UUIO {
     @NotNull
     private String name;
@@ -45,16 +52,12 @@ public class Index extends UUIO {
         this.description = description;
     }
 
-    public @NotNull List<UUID> getEntries() {
-        return entries;
-    }
-
     public @NotNull @UnmodifiableView List<UUID> getEntriesUuid() {
         return Collections.unmodifiableList(entries);
     }
 
-    public @NotNull Stream<UUIO> getEntries(@NotNull Engine dataEngine) {
-        return entries.stream().map(dataEngine::get);
+    public @NotNull List<UUIO> getEntries() {
+        return entries.stream().map(Engine.getInstance()::get).toList();
     }
 
     public void addEntry(@NotNull UUID item) {
@@ -71,6 +74,20 @@ public class Index extends UUIO {
 
     public void removeEntry(@NotNull UUIO item) {
         entries.remove(item.getUuid());
+    }
+
+    public List<Note> getNotes() {
+        return getEntries().stream()
+                .filter(o -> o instanceof Note)
+                .map(o -> (Note) o)
+                .toList();
+    }
+
+    public List<Index> getIndexes() {
+        return getEntries().stream()
+                .filter(o -> o instanceof Index)
+                .map(o -> (Index) o)
+                .toList();
     }
 
 }

@@ -1,7 +1,9 @@
 package com.akioweh.comp0004javacoursework.engine;
 
 import com.akioweh.comp0004javacoursework.models.Note;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -48,6 +50,14 @@ public class StorageHandler {
                 throw new RuntimeException("Failed to create local media storage path: " + this.localMediaStoragePath);
             }
         }
+        // serialize all fields, but ONLY fields (no methods and ignore getters/setters)
+        objectMapper.setVisibility(objectMapper.getSerializationConfig().getDefaultVisibilityChecker()
+                .withFieldVisibility(JsonAutoDetect.Visibility.ANY)
+                .withGetterVisibility(JsonAutoDetect.Visibility.NONE)
+                .withSetterVisibility(JsonAutoDetect.Visibility.NONE)
+                .withCreatorVisibility(JsonAutoDetect.Visibility.NONE));
+        // pretty print
+        objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
     }
 
     public UUIO read(@NotNull UUID uuid) {

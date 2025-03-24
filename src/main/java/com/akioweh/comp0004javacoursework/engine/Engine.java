@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.UUID;
+import java.util.logging.Logger;
 
 
 /**
@@ -45,6 +46,7 @@ public class Engine {
     public static void init(String localStoragePath, String localMediaStoragePath, UUID rootIndexUuid) {
         if (instance == null) {
             instance = new Engine(localStoragePath, localMediaStoragePath, rootIndexUuid);
+            Logger.getLogger(Engine.class.getName()).info("Engine initialized with storage path: " + localStoragePath);
         } else {
             throw new IllegalStateException("Engine is already initialized");
         }
