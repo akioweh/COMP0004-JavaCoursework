@@ -1,6 +1,6 @@
-package com.akioweh.comp0004javacoursework.engine;
+package com.akioweh.comp0004javacoursework.models;
 
-import com.akioweh.comp0004javacoursework.models.Note;
+import com.akioweh.comp0004javacoursework.engine.Engine;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.Vector;
-import java.util.stream.Stream;
+
 
 /**
  * Class to aggregate a given collection of notes and other indices.

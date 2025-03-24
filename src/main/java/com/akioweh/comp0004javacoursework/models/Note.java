@@ -1,6 +1,5 @@
 package com.akioweh.comp0004javacoursework.models;
 
-import com.akioweh.comp0004javacoursework.engine.UUIO;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;

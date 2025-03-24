@@ -1,6 +1,8 @@
 package com.akioweh.comp0004javacoursework.engine;
 
+import com.akioweh.comp0004javacoursework.models.Index;
 import com.akioweh.comp0004javacoursework.models.Note;
+import com.akioweh.comp0004javacoursework.models.UUIO;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -63,7 +65,7 @@ public class Engine {
      * Regular use should prefer the more specifically typed
      * getNote() or getIndex() methods.
      */
-    UUIO get(@NotNull UUID uuid) {
+    public UUIO get(@NotNull UUID uuid) {
         UUIO object = noteCache.get(uuid);
         if (object != null) {
             return object;

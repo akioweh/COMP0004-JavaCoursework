@@ -1,7 +1,7 @@
 package com.akioweh.comp0004javacoursework.main;
 
 import com.akioweh.comp0004javacoursework.engine.Engine;
-import com.akioweh.comp0004javacoursework.engine.Index;
+import com.akioweh.comp0004javacoursework.models.Index;
 import jakarta.servlet.ServletContextListener;
 
 import java.io.IOException;

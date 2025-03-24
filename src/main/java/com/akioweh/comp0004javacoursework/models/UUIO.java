@@ -1,6 +1,5 @@
-package com.akioweh.comp0004javacoursework.engine;
+package com.akioweh.comp0004javacoursework.models;
 
-import com.akioweh.comp0004javacoursework.models.Note;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
