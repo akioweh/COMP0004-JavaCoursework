@@ -6,4 +6,4 @@
  * Renderers are provided as singletons as they provide an effectively static interface.
  * (But their methods are not static so that they all implement the same interface.)
  */
-package com.akioweh.comp0004javacoursework.renderer;
+package com.akioweh.comp0004javacoursework.renderers;

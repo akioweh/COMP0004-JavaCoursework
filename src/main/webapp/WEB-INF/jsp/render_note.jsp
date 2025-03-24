@@ -4,7 +4,7 @@
 --%>
 <%--@elvariable id="note" type="com.akioweh.comp0004javacoursework.models.Note"--%>
 <%@ page import="com.akioweh.comp0004javacoursework.models.Note" %>
-<%@ page import="com.akioweh.comp0004javacoursework.renderer.AutoRenderer" %>
+<%@ page import="com.akioweh.comp0004javacoursework.renderers.AutoRenderer" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <% var note = (Note) request.getAttribute("note"); %>
 <html>

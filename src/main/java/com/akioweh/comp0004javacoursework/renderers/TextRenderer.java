@@ -1,4 +1,4 @@
-package com.akioweh.comp0004javacoursework.renderer;
+package com.akioweh.comp0004javacoursework.renderers;
 
 import com.akioweh.comp0004javacoursework.models.TextElement;
 import org.jetbrains.annotations.NotNull;
