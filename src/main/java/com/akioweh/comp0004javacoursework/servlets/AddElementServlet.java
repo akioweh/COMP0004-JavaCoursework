@@ -50,5 +50,11 @@ public class AddElementServlet extends HttpServlet {
             default -> throw new IllegalStateException("Unexpected value: " + elementType);
         };
         note.insertElement(beforeElement, newElement);
+
+        // Save the note
+        engine.saveNote(note.getUuid());
+
+        // Return success
+        response.setStatus(HttpServletResponse.SC_OK);
     }
 }

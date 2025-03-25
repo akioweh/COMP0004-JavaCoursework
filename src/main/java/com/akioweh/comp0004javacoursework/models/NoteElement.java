@@ -9,26 +9,51 @@ import org.jetbrains.annotations.NotNull;
  * Note elements are the building blocks of a note.
  * They can be text, links, images, etc.
  * </p>
+ * <p>
+ * Follows JavaBeans conventions for better integration with JSP and servlet ecosystem.
+ * </p>
  */
-public sealed abstract class NoteElement extends UUIO permits TextElement, LinkElement {
+public abstract class NoteElement extends UUIO {
+    private static final long serialVersionUID = 1L;
+
     /**
      * Used to populate HTML with section ids,
      * so we can reference specific sections in URLs.
      */
     protected @NotNull String sectionTag;
 
+    /**
+     * Default constructor required for JavaBeans.
+     */
     public NoteElement() {
+        super();
         this.sectionTag = "";
     }
 
+    /**
+     * Constructor with a section tag.
+     * 
+     * @param sectionTag The section tag
+     */
     public NoteElement(@NotNull String sectionTag) {
+        super();
         this.sectionTag = sectionTag;
     }
 
+    /**
+     * Gets the section tag of this element.
+     * 
+     * @return The section tag
+     */
     public @NotNull String getSectionTag() {
         return sectionTag;
     }
 
+    /**
+     * Sets the section tag of this element.
+     * 
+     * @param sectionTag The new section tag
+     */
     public void setSectionTag(@NotNull String sectionTag) {
         this.sectionTag = sectionTag;
     }

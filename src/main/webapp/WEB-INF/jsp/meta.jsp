@@ -6,7 +6,7 @@
 <script>
     function newNote() {
         // send POST request to create a new note
-        fetch('${pageContext.request.contextPath}/note', {
+        fetch('${pageContext.request.contextPath}/api/note', {
             method: 'POST',
         }).then(response => {
             if (response.ok) {
