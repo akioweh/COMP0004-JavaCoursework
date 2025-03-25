@@ -4,6 +4,7 @@ import com.akioweh.comp0004javacoursework.engine.Engine;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnmodifiableView;
 
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.Vector;
  * Follows JavaBeans conventions for better integration with JSP and servlet ecosystem.
  */
 public class Index extends UUIO {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @NotNull

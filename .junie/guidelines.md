@@ -69,6 +69,9 @@ COMP0004-JavaCoursework/
 
 ## Key Components and Their Responsibilities
 
+routes.md documents the server-client communication structure.
+refer to it and update it accordingly.
+
 ### Models
 
 The application uses several model classes to represent the data:

@@ -3,7 +3,7 @@
 <%@ attribute name="element" required="true" type="com.akioweh.comp0004javacoursework.models.MediaElement" %>
 <%@ attribute name="noteUuid" required="true" type="java.util.UUID" %>
 
-<form method="POST" action="${pageContext.request.contextPath}/api/element/${noteUuid}/${element.uuid}" class="element-edit-form">
+<form onsubmit="updateElement(event, '${noteUuid}', '${element.uuid}')" class="element-edit-form">
     <div class="form-group">
         <label for="mediaType">Media Type:</label>
         <select id="mediaType" name="mediaType" class="form-control" required>
@@ -34,20 +34,20 @@
         const previewContainer = document.createElement('div');
         previewContainer.className = 'media-preview';
         previewContainer.innerHTML = '<h4>Preview</h4><div id="preview-content"></div>';
-        
+
         const form = document.querySelector('.element-edit-form');
         form.appendChild(previewContainer);
-        
+
         function updatePreview() {
             const mediaType = mediaTypeSelect.value;
             const uri = uriInput.value;
             const previewContent = document.getElementById('preview-content');
-            
+
             if (!uri) {
                 previewContent.innerHTML = '<p>Enter a URL to see a preview</p>';
                 return;
             }
-            
+
             switch(mediaType) {
                 case 'IMAGE':
                     previewContent.innerHTML = `<img src="${uri}" alt="Preview" style="max-width: 100%;">`;
@@ -62,10 +62,10 @@
                     previewContent.innerHTML = `<a href="${uri}" target="_blank">Preview link</a>`;
             }
         }
-        
+
         mediaTypeSelect.addEventListener('change', updatePreview);
         uriInput.addEventListener('input', updatePreview);
-        
+
         // Initial preview
         updatePreview();
     });

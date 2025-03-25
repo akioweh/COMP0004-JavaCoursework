@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -20,11 +21,14 @@ import java.util.Vector;
  * Follows JavaBeans conventions for better integration with JSP and servlet ecosystem.
  */
 public class Note extends UUIO {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @NotNull
     private Date created;
+    @NotNull
     private Set<String> tags;
+    @NotNull
     private List<NoteElement> elements;
     @NotNull
     private String title;

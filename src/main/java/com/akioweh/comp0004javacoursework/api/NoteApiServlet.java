@@ -26,26 +26,6 @@ import java.util.stream.Collectors;
 @WebServlet(name = "Note API", urlPatterns = "/api/note/*")
 public class NoteApiServlet extends ApiServlet {
 
-    /**
-     * Renders a note by forwarding to the note JSP.
-     *
-     * @param request The HTTP request
-     * @param response The HTTP response
-     * @param uuid The UUID of the note to render
-     * @throws ServletException If a servlet error occurs
-     * @throws IOException If an I/O error occurs
-     */
-    public static void renderNote(HttpServletRequest request, HttpServletResponse response, @NotNull UUID uuid) throws ServletException, IOException {
-        var engine = Engine.getInstance();
-        var note = engine.getNote(uuid);
-        if (note == null) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Note not found");
-            return;
-        }
-        request.setAttribute("note", note);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/render_note.jsp");
-        dispatcher.forward(request, response);
-    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -55,17 +35,8 @@ public class NoteApiServlet extends ApiServlet {
             return;
         }
 
-        Note note = engine.getNote(uuid);
-        if (note == null) {
-            sendNotFound(response, "Note not found");
-            return;
-        }
-
-        // Forward to the note view
-        request.setAttribute("note", note);
-        request.setAttribute("editTargetUuid", null);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/render_note.jsp");
-        dispatcher.forward(request, response);
+        // Forward to the note view servlet instead of duplicating rendering logic
+        request.getRequestDispatcher("/note/" + uuid).forward(request, response);
     }
 
     @Override

@@ -3,121 +3,27 @@
   24/03/2025 2:27 am
 --%>
 <%--@elvariable id="note" type="com.akioweh.comp0004javacoursework.models.Note"--%>
-<%@ page import="com.akioweh.comp0004javacoursework.models.Note" %>
+<%--@elvariable id="noteViewState" type="com.akioweh.comp0004javacoursework.view.NoteViewState"--%>
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
-<%@ page import="java.util.UUID" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
-<c:set var="editMode" value="${not empty editTargetUuid}" />
+<c:set var="note" value="${noteViewState.note}" />
+<c:set var="editMode" value="${noteViewState.editMode}" />
+<c:set var="editTargetUuid" value="${noteViewState.editTargetUuid}" />
 <html>
 <head>
     <jsp:include page="meta.jsp"/>
     <script>
-        function addNewElement(beforeElementUuid, elementType) {
-            // send POST request to add new element
-            let url = '${pageContext.request.contextPath}/api/element/${note.uuid}';
-            if (beforeElementUuid) {
-                url += '/' + beforeElementUuid;
-            }
-
-            fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: new URLSearchParams({
-                    elementType: elementType
-                }).toString()
-            }).then(response => {
-                if (response.ok) {
-                    // reload the page to see the new element
-                    location.reload();
-                } else {
-                    response.text().then(text => {
-                        alert('Error: ' + text);
-                    });
-                }
-            });
-        }
-
-        function deleteElement(elementUuid) {
-            if (confirm('Are you sure you want to delete this element?')) {
-                // send DELETE request to delete element
-                fetch('${pageContext.request.contextPath}/api/element/${note.uuid}/' + elementUuid, {
-                    method: 'DELETE'
-                }).then(response => {
-                    if (response.ok) {
-                        // reload the page to see the changes
-                        location.reload();
-                    } else {
-                        response.text().then(text => {
-                            alert('Error: ' + text);
-                        });
-                    }
-                });
-            }
-        }
-
-        function deleteNote() {
-            if (confirm('Are you sure you want to delete this note?')) {
-                // send DELETE request to delete note
-                fetch('${pageContext.request.contextPath}/api/note/${note.uuid}', {
-                    method: 'DELETE'
-                }).then(response => {
-                    if (response.ok) {
-                        // redirect to home page
-                        window.location.href = '${pageContext.request.contextPath}/';
-                    } else {
-                        response.text().then(text => {
-                            alert('Error: ' + text);
-                        });
-                    }
-                });
-            }
-        }
-
-        function editNote() {
-            document.getElementById('note-view').style.display = 'none';
-            document.getElementById('note-edit').style.display = 'block';
-        }
-
-        function cancelEdit() {
-            document.getElementById('note-view').style.display = 'block';
-            document.getElementById('note-edit').style.display = 'none';
-        }
-
-        function newNote() {
-            // send POST request to create a new note
-            fetch('${pageContext.request.contextPath}/api/note', {
-                method: 'POST'
-            }).then(response => {
-                if (response.ok) {
-                    // redirect to the new note
-                    window.location.href = response.url;
-                } else {
-                    response.text().then(text => {
-                        alert('Error: ' + text);
-                    });
-                }
-            });
-        }
+        // Set the note UUID for note.js
+        var noteUuid = '${note.uuid}';
     </script>
+    <script src="${pageContext.request.contextPath}/static/js/note.js"></script>
     <title>Notes App | Note View</title>
 </head>
 <body>
-<header>
-    <div class="container">
-        <h1>Note View</h1>
-        <nav>
-            <ul>
-                <li><a href="${pageContext.request.contextPath}/">Home</a></li>
-                <li><button onclick="newNote()">New Note</button> </li>
-            </ul>
-        </nav>
-    </div>
-</header>
+<tags:header title="Note View" showNewIndex="false" />
 <div class="container">
     <div id="main">
         <div id="note-view">
@@ -162,7 +68,7 @@
                 </div>
                 <div class="form-group">
                     <label for="tags">Tags (comma separated):</label>
-                    <input type="text" id="tags" name="tags" value="${fn:join(note.tags, ', ')}">
+                    <input type="text" id="tags" name="tags" value="${fn:join(note.tags.toArray(), ', ')}">
                 </div>
                 <div class="form-actions">
                     <button type="submit">Save Changes</button>
@@ -171,31 +77,6 @@
             </form>
         </div>
 
-        <script>
-            function updateNote(event) {
-                event.preventDefault();
-                const form = document.getElementById('edit-note-form');
-                const formData = new FormData(form);
-
-                // send PUT request to update note
-                fetch('${pageContext.request.contextPath}/api/note/${note.uuid}', {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: new URLSearchParams(formData).toString()
-                }).then(response => {
-                    if (response.ok) {
-                        // reload the page to see the changes
-                        location.reload();
-                    } else {
-                        response.text().then(text => {
-                            alert('Error: ' + text);
-                        });
-                    }
-                });
-            }
-        </script>
 
         <div id="note-content">
             <c:forEach var="element" items="${note.elements}">
@@ -220,13 +101,13 @@
                         <button class="delete-element-btn" onclick="deleteElement('${element.uuid}')" type="button">
                             Delete Element
                         </button>
-                        <c:if test="${not element.uuid.equals(editTargetUuid)}">
+                        <c:if test="${not noteViewState.isElementBeingEdited(element)}">
                         <a href="${pageContext.request.contextPath}/note/${note.uuid}?edit=${element.uuid}" class="edit-element-btn">
                             Edit Element
                         </a>
                         </c:if>
                     </div>
-                    <tags:element element="${element}" noteUuid="${note.uuid}" editMode="${element.uuid.equals(editTargetUuid)}" />
+                    <tags:element element="${element}" noteUuid="${note.uuid}" editMode="${noteViewState.isElementBeingEdited(element)}" />
                 </div>
             </c:forEach>
             <div class="add-element-container">

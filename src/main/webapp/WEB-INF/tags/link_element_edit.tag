@@ -3,7 +3,7 @@
 <%@ attribute name="element" required="true" type="com.akioweh.comp0004javacoursework.models.LinkElement" %>
 <%@ attribute name="noteUuid" required="true" type="java.util.UUID" %>
 
-<form method="POST" action="${pageContext.request.contextPath}/api/element/${noteUuid}/${element.uuid}" class="element-edit-form">
+<form onsubmit="updateElement(event, '${noteUuid}', '${element.uuid}')" class="element-edit-form">
     <div class="form-group">
         <label for="uri">URL:</label>
         <input type="url" id="uri" name="uri" value="${element.uri}" class="form-control" required>

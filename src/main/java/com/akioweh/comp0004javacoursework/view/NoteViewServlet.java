@@ -6,7 +6,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -46,9 +45,10 @@ public class NoteViewServlet extends ViewServlet {
             return;
         }
 
-        // Set attributes for the JSP
-        request.setAttribute("note", note);
-        request.setAttribute("editTargetUuid", Util.parseUUID(request.getParameter("edit")));
+        // carrier object to pass data to the JSP
+        UUID editTargetUuid = Util.parseUUID(request.getParameter("edit"));
+        NoteViewState noteViewState = new NoteViewState(note, editTargetUuid);
+        request.setAttribute("noteViewState", noteViewState);
 
         // Forward to the note JSP
         forwardToJsp(request, response, "/WEB-INF/jsp/render_note.jsp");

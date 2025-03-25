@@ -4,17 +4,7 @@
 --%>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/style.css">
 <script>
-    function newNote() {
-        // send POST request to create a new note
-        fetch('${pageContext.request.contextPath}/api/note', {
-            method: 'POST',
-        }).then(response => {
-            if (response.ok) {
-                // redirect to the new note page
-                window.location.href = response.url;
-            } else {
-                console.error('Failed to create new note');
-            }
-        });
-    }
+    // Set the context path for JavaScript files
+    window.contextPath = '${pageContext.request.contextPath}';
 </script>
+<script src="${pageContext.request.contextPath}/static/js/common.js"></script>

@@ -11,7 +11,7 @@ import java.io.IOException;
  * Servlet for rendering the home page.
  * This servlet simply forwards to the index.jsp page.
  */
-@WebServlet(name = "Root View", urlPatterns = {"", "/"})
+@WebServlet(name = "Root View", urlPatterns = "")
 public class RootViewServlet extends ViewServlet {
 
     @Override

@@ -4,108 +4,24 @@
 --%>
 <%--@elvariable id="index" type="com.akioweh.comp0004javacoursework.models.Index"--%>
 <%@ page contentType="text/html;charset=UTF-8" %>
-<%@ page import="com.akioweh.comp0004javacoursework.models.Index" %>
 <%@ page import="com.akioweh.comp0004javacoursework.engine.Engine" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+<%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 <!DOCTYPE html>
 <html>
 <head>
     <jsp:include page="meta.jsp"/>
     <title>Notes App | Index View</title>
     <script>
-        function deleteIndex() {
-            if (confirm('Are you sure you want to delete this index?')) {
-                // send DELETE request to delete index
-                fetch('${pageContext.request.contextPath}/api/index/${index.uuid}', {
-                    method: 'DELETE'
-                }).then(response => {
-                    if (response.ok) {
-                        // redirect to home page
-                        window.location.href = '${pageContext.request.contextPath}/';
-                    } else {
-                        response.text().then(text => {
-                            alert('Error: ' + text);
-                        });
-                    }
-                });
-            }
-        }
-
-        function editIndex() {
-            document.getElementById('index-view').style.display = 'none';
-            document.getElementById('index-edit').style.display = 'block';
-        }
-
-        function cancelEdit() {
-            document.getElementById('index-view').style.display = 'block';
-            document.getElementById('index-edit').style.display = 'none';
-        }
-
-        function removeEntry(entryUuid) {
-            if (confirm('Are you sure you want to remove this entry from the index?')) {
-                // send DELETE request to remove entry
-                fetch('${pageContext.request.contextPath}/api/index/${index.uuid}/entry/' + entryUuid, {
-                    method: 'DELETE'
-                }).then(response => {
-                    if (response.ok) {
-                        // reload the page to see the changes
-                        location.reload();
-                    } else {
-                        response.text().then(text => {
-                            alert('Error: ' + text);
-                        });
-                    }
-                });
-            }
-        }
-
-        function newIndex() {
-            // send POST request to create a new index
-            fetch('${pageContext.request.contextPath}/api/index', {
-                method: 'POST'
-            }).then(response => {
-                if (response.ok) {
-                    // redirect to the new index
-                    window.location.href = response.url;
-                } else {
-                    response.text().then(text => {
-                        alert('Error: ' + text);
-                    });
-                }
-            });
-        }
-
-        function newNote() {
-            // send POST request to create a new note
-            fetch('${pageContext.request.contextPath}/api/note', {
-                method: 'POST'
-            }).then(response => {
-                if (response.ok) {
-                    // redirect to the new note
-                    window.location.href = response.url;
-                } else {
-                    response.text().then(text => {
-                        alert('Error: ' + text);
-                    });
-                }
-            });
-        }
+        // Set the index UUID for index.js
+        const indexUuid = '${index.uuid}';
     </script>
+    <script src="${pageContext.request.contextPath}/static/js/index.js"></script>
 </head>
 <body>
-<header>
-    <div class="container">
-        <h1>Index Details</h1>
-        <nav>
-            <ul>
-                <li><a href="${pageContext.request.contextPath}/">Home</a></li>
-                <li><button onclick="newNote()">New Note</button> </li>
-            </ul>
-        </nav>
-    </div>
-</header>
+<tags:header title="Index Details" showNewIndex="false" />
 <div class="container">
     <div class="main">
         <div id="index-view">
@@ -172,31 +88,6 @@
             </form>
         </div>
 
-        <script>
-            function updateIndex(event) {
-                event.preventDefault();
-                const form = document.getElementById('edit-index-form');
-                const formData = new FormData(form);
-
-                // send PUT request to update index
-                fetch('${pageContext.request.contextPath}/api/index/${index.uuid}', {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: new URLSearchParams(formData).toString()
-                }).then(response => {
-                    if (response.ok) {
-                        // reload the page to see the changes
-                        location.reload();
-                    } else {
-                        response.text().then(text => {
-                            alert('Error: ' + text);
-                        });
-                    }
-                });
-            }
-        </script>
     </div>
 </div>
 <jsp:include page="footer.jsp"/>

@@ -2,6 +2,7 @@ package com.akioweh.comp0004javacoursework.models;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.Serial;
 import java.net.URI;
 
 
@@ -19,6 +20,7 @@ import java.net.URI;
  * </p>
  */
 public class LinkElement extends NoteElement {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private @NotNull URI uri;

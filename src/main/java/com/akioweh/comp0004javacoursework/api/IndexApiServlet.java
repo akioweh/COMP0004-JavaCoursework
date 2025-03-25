@@ -31,7 +31,7 @@ import java.util.UUID;
 public class IndexApiServlet extends ApiServlet {
 
     /**
-     * Renders an index by forwarding to the index JSP.
+     * Renders an index by forwarding to the index view servlet.
      *
      * @param request The HTTP request
      * @param response The HTTP response
@@ -40,15 +40,8 @@ public class IndexApiServlet extends ApiServlet {
      * @throws IOException If an I/O error occurs
      */
     public static void renderIndex(HttpServletRequest request, HttpServletResponse response, @NotNull UUID uuid) throws ServletException, IOException {
-        var engine = Engine.getInstance();
-        var index = engine.getIndex(uuid);
-        if (index == null) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Index not found");
-            return;
-        }
-        request.setAttribute("index", index);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/render_index.jsp");
-        dispatcher.forward(request, response);
+        // Forward to the index view servlet instead of duplicating rendering logic
+        request.getRequestDispatcher("/index/" + uuid).forward(request, response);
     }
 
     /**
@@ -56,20 +49,23 @@ public class IndexApiServlet extends ApiServlet {
      * The path info is expected to be in the format "/{indexUuid}" or "/{indexUuid}/entry/{entryUuid}".
      * 
      * @param request The HTTP request
-     * @return An array containing the index UUID and entry UUID (may be null)
+     * @return An array containing the index UUID and entry UUID (may be null), or null if the path info is invalid
      */
     protected UUID[] getUuidsFromPath(HttpServletRequest request) {
         String pathInfo = request.getPathInfo();
         if (pathInfo == null || pathInfo.equals("/")) {
-            return new UUID[] { null, null };
+            return null;
         }
 
         String[] parts = pathInfo.substring(1).split("/");
         if (parts.length < 1) {
-            return new UUID[] { null, null };
+            return null;
         }
 
         UUID indexUuid = Util.parseUUID(parts[0]);
+        if (indexUuid == null) {
+            return null;
+        }
 
         // Check if this is an entry operation
         if (parts.length >= 3 && "entry".equals(parts[1])) {
@@ -91,12 +87,13 @@ public class IndexApiServlet extends ApiServlet {
      */
     protected Object[] getIndexAndEntry(HttpServletRequest request, HttpServletResponse response, boolean requireEntry) throws IOException {
         UUID[] uuids = getUuidsFromPath(request);
+        if (uuids == null) {
+            sendBadRequest(response, "Invalid path format");
+            return null;
+        }
+
         UUID indexUuid = uuids[0];
         UUID entryUuid = uuids[1];
-
-        if (indexUuid == null) {
-            return new Object[] { null, null };
-        }
 
         Index index = engine.getIndex(indexUuid);
         if (index == null) {
@@ -121,33 +118,21 @@ public class IndexApiServlet extends ApiServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         UUID[] uuids = getUuidsFromPath(request);
+        if (uuids == null) {
+            // Invalid path info, forward to the index view servlet with no path
+            request.getRequestDispatcher("/index").forward(request, response);
+            return;
+        }
+
         UUID indexUuid = uuids[0];
-
-        if (indexUuid == null) {
-            // No index UUID provided, render the root index
-            renderIndex(request, response, engine.getRootIndex().getUuid());
-            return;
-        }
-
-        Index index = engine.getIndex(indexUuid);
-        if (index == null) {
-            sendNotFound(response, "Index not found");
-            return;
-        }
-
-        // Forward to the index view
-        request.setAttribute("index", index);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/render_index.jsp");
-        dispatcher.forward(request, response);
+        // Forward to the index view servlet
+        request.getRequestDispatcher("/index/" + indexUuid).forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         UUID[] uuids = getUuidsFromPath(request);
-        UUID indexUuid = uuids[0];
-        UUID entryUuid = uuids[1];
-
-        if (indexUuid == null) {
+        if (uuids == null) {
             // Create a new index
             Index newIndex = new Index();
             String name = request.getParameter("name");
@@ -171,6 +156,9 @@ public class IndexApiServlet extends ApiServlet {
             sendRedirect(request, response, "/index/" + newIndex.getUuid());
             return;
         }
+
+        UUID indexUuid = uuids[0];
+        UUID entryUuid = uuids[1];
 
         // If we have an index UUID but no entry UUID, it's an error
         if (entryUuid == null) {
@@ -224,23 +212,17 @@ public class IndexApiServlet extends ApiServlet {
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         UUID[] uuids = getUuidsFromPath(request);
-        UUID indexUuid = uuids[0];
-        UUID entryUuid = uuids[1];
-
-        if (indexUuid == null) {
-            sendBadRequest(response, "Index UUID is required");
+        if (uuids == null) {
+            sendBadRequest(response, "Invalid path format");
             return;
         }
+
+        UUID indexUuid = uuids[0];
+        UUID entryUuid = uuids[1];
 
         Index index = engine.getIndex(indexUuid);
         if (index == null) {
             sendNotFound(response, "Index not found");
-            return;
-        }
-
-        // Check if this is the root index
-        if (indexUuid.equals(engine.getRootIndex().getUuid())) {
-            sendBadRequest(response, "Cannot delete the root index");
             return;
         }
 
@@ -257,6 +239,12 @@ public class IndexApiServlet extends ApiServlet {
 
             // Return success
             sendSuccess(response, "Entry removed successfully");
+            return;
+        }
+
+        // Check if this is the root index
+        if (indexUuid.equals(engine.getRootIndex().getUuid())) {
+            sendBadRequest(response, "Cannot delete the root index");
             return;
         }
 

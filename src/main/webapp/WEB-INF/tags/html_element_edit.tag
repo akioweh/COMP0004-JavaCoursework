@@ -3,7 +3,7 @@
 <%@ attribute name="element" required="true" type="com.akioweh.comp0004javacoursework.models.HTMLElement" %>
 <%@ attribute name="noteUuid" required="true" type="java.util.UUID" %>
 
-<form method="POST" action="${pageContext.request.contextPath}/api/element/${noteUuid}/${element.uuid}" class="element-edit-form">
+<form onsubmit="updateElement(event, '${noteUuid}', '${element.uuid}')" class="element-edit-form">
     <div class="form-group">
         <label for="content">HTML Content:</label>
         <textarea id="content" name="content" rows="10" class="form-control html-editor">${element.content}</textarea>

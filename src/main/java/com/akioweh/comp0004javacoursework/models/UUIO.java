@@ -2,6 +2,7 @@ package com.akioweh.comp0004javacoursework.models;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
@@ -13,6 +14,7 @@ import java.util.UUID;
  * Implements Serializable to support standard Java serialization.
  */
 public abstract class UUIO implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private UUID uuid;

@@ -2,6 +2,7 @@ package com.akioweh.comp0004javacoursework.models;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.Serial;
 import java.net.URI;
 
 
@@ -12,6 +13,7 @@ import java.net.URI;
  * </p>
  */
 public class MediaElement extends LinkElement {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @NotNull

@@ -2,6 +2,8 @@ package com.akioweh.comp0004javacoursework.models;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.Serial;
+
 
 /**
  * Base form for all note elements.
@@ -14,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
  * </p>
  */
 public abstract class NoteElement extends UUIO {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

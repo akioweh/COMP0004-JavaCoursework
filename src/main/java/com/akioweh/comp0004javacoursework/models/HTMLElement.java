@@ -2,6 +2,8 @@ package com.akioweh.comp0004javacoursework.models;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.Serial;
+
 
 /**
  * Text element where the renderer should treat the content as HTML.
@@ -10,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
  * </p>
  */
 public class HTMLElement extends TextElement {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

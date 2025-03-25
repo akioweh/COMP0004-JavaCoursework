@@ -2,6 +2,8 @@ package com.akioweh.comp0004javacoursework.models;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.Serial;
+
 
 /**
  * Represents a note element that is just plain text.
@@ -14,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
  * </p>
  */
 public class TextElement extends NoteElement {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private @NotNull String content;
