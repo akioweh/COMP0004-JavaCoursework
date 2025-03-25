@@ -22,4 +22,18 @@ public class AutoRenderer {
             case LinkElement linkElement -> LinkRenderer.getInstance().render(linkElement);
         };
     }
+
+    public static @NotNull String renderEdit(@NotNull NoteElement element) {
+        var formInner = switch (element) {
+            case HTMLElement htmlElement -> HTMLRenderer.getInstance().renderEdit(htmlElement);
+            case TextElement textElement -> TextRenderer.getInstance().renderEdit(textElement);
+            case MediaElement mediaElement -> MediaRenderer.getInstance().renderEdit(mediaElement);
+            case LinkElement linkElement -> LinkRenderer.getInstance().renderEdit(linkElement);
+        };
+        return "<form method=\"POST\" action=\"\">" +
+                "<input type=\"hidden\" name=\"id\" value=\"" + element.getUuid() + "\">" +
+                formInner +
+                "<input type=\"submit\" value=\"Save\">" +
+                "</form>";
+    }
 }

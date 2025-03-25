@@ -16,4 +16,12 @@ public class HTMLRenderer implements ElementRenderer<HTMLElement> {
         // basically no-op :)
         return "<div>" + element.getContent() + "</div>";
     }
+
+    @Override
+    public @NotNull String renderEdit(@NotNull HTMLElement element) {
+        return "<label for=\"content\">HTML:</label>" +
+                "<textarea id=\"content\" name=\"content\">" +
+                element.getContent() +
+                "</textarea>";
+    }
 }

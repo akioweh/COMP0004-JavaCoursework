@@ -16,6 +16,7 @@
         <nav>
             <ul>
                 <li><a href="${pageContext.request.contextPath}/">Home</a></li>
+                <li><button onclick="newNote()">New Note</button> </li>
             </ul>
         </nav>
     </div>

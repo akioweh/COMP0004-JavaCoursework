@@ -1,7 +1,10 @@
 package com.akioweh.comp0004javacoursework.servlets;
 
 import com.akioweh.comp0004javacoursework.engine.Engine;
+import com.akioweh.comp0004javacoursework.models.LinkElement;
+import com.akioweh.comp0004javacoursework.models.MediaElement;
 import com.akioweh.comp0004javacoursework.models.Note;
+import com.akioweh.comp0004javacoursework.models.TextElement;
 import com.akioweh.comp0004javacoursework.util.Util;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -12,6 +15,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.UUID;
 
 
@@ -24,6 +28,7 @@ public class NoteServlet extends HttpServlet {
             return;
         }
         request.setAttribute("note", note);
+        request.setAttribute("editTargetUuid", Util.parseUUID(request.getParameter("edit")));
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/render_note.jsp");
         dispatcher.forward(request, response);
     }
@@ -55,19 +60,74 @@ public class NoteServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         var engine = Engine.getInstance();
         var pathInfo = request.getPathInfo();
-        if (pathInfo != null) {
-            // not allowed; post is for new notes only
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST,
-                    "Invalid request. POST is for new notes only; UUID not allowed.");
-            return;
-        }
-        var newNote = new Note();
-        newNote.setTitle("New Note");
-        newNote.setBrief("New Note on " + newNote.getCreated());
-        engine.addNote(newNote);
+        if (pathInfo == null) {
+            // new note
+            var newNote = new Note();
+            newNote.setTitle("New Note");
+            newNote.setBrief("New Note on " + newNote.getCreated());
+            engine.addNote(newNote);
 
-        // redirect to display the new note
-        response.sendRedirect(request.getContextPath() + "/note/" + newNote.getUuid());
+            // redirect to display the new note
+            response.sendRedirect(request.getContextPath() + "/note/" + newNote.getUuid());
+        } else {
+            // edit existing note
+            var noteUuid = Util.parseUUID(pathInfo.substring(1));
+            var elementUuid = Util.parseUUID(request.getParameter("edit"));
+            if (elementUuid == null || noteUuid == null) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid UUID");
+                return;
+            }
+            var note = engine.getNote(noteUuid);
+            if (note == null) {
+                response.sendError(HttpServletResponse.SC_NOT_FOUND, "Note not found");
+                return;
+            }
+            // find the element
+            var element = note.getElement(elementUuid);
+            if (element == null) {
+                response.sendError(HttpServletResponse.SC_NOT_FOUND, "Element not found");
+                return;
+            }
+            // update the element
+            switch (element) {
+                case TextElement textElement: {
+                    var content = request.getParameter("content");
+                    if (content != null) {
+                        textElement.setContent(content);
+                    }
+                    break;
+                }
+                case MediaElement mediaElement: {
+                    var mediaTypeString = request.getParameter("mediaType");
+                    if (mediaTypeString != null) {
+                        var mediaType = MediaElement.MediaType.valueOf(mediaTypeString);
+                        mediaElement.setMediaType(mediaType);
+                    }
+                    var uri = request.getParameter("uri");
+                    var displayText = request.getParameter("displayText");
+                    if (uri != null) {
+                        mediaElement.setUri(URI.create(uri));
+                    }
+                    if (displayText != null) {
+                        mediaElement.setDisplayText(displayText);
+                    }
+                    break;
+                }
+                case LinkElement linkElement: {
+                    var uri = request.getParameter("uri");
+                    var displayText = request.getParameter("displayText");
+                    if (uri != null) {
+                        linkElement.setUri(URI.create(uri));
+                    }
+                    if (displayText != null) {
+                        linkElement.setDisplayText(displayText);
+                    }
+                    break;
+                }
+            }
+            // save the note
+            engine.saveNote(note.getUuid());
+        }
     }
 
 }

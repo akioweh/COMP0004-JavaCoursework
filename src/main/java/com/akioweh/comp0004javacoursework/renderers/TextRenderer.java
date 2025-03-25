@@ -41,4 +41,14 @@ public class TextRenderer implements ElementRenderer<TextElement> {
                 .map(paragraph -> "<p>" + String.join("<br>", List.of(asLines(paragraph))) + "</p>")
                 .collect(Collectors.joining("\n"));
     }
+
+    @Override
+    public @NotNull String renderEdit(@NotNull TextElement element) {
+        return "<p>" +
+                "<label for=\"content\">content:</label>" +
+                "</p>" +
+                "<textarea id=\"content\" name=\"content\">" +
+                element.getContent() +
+                "</textarea>";
+    }
 }

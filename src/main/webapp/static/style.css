@@ -1,78 +1,199 @@
+/* General styles */
 body {
     font-family: Arial, sans-serif;
+    line-height: 1.6;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
+    background-color: #f5f5f5;
 }
 
 .container {
-    width: 80%;
+    max-width: 800px;
     margin: 0 auto;
-    overflow: hidden;
-}
-
-header {
-    background: #333;
-    color: #fff;
-    padding-top: 30px;
-    min-height: 70px;
-    border-bottom: #77aaff 3px solid;
-}
-
-header a {
-    color: #fff;
-    text-decoration: none;
-    text-transform: uppercase;
-    font-size: 16px;
-}
-
-header ul {
-    padding: 0;
-    list-style: none;
-}
-
-header li {
-    float: left;
-    display: inline;
-    padding: 0 20px 0 20px;
-}
-
-footer {
-    background: #333;
-    color: #fff;
-    text-align: center;
-    padding: 10px 0;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-}
-
-.main {
     padding: 20px;
-    background: #fff;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    color: #333;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+}
+
+/* Tags styles */
+.tags-container {
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+}
+
+.tags-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-bottom: 10px;
+}
+
+.tag {
+    display: inline-flex;
+    align-items: center;
+    background-color: #e0e0e0;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 14px;
+}
+
+.remove-tag-btn {
+    background: none;
+    border: none;
+    color: #666;
+    cursor: pointer;
+    font-size: 16px;
+    margin-left: 5px;
+}
+
+.add-tag-form {
+    display: flex;
+    gap: 5px;
+}
+
+.add-tag-form input {
+    flex: 1;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+}
+
+.add-tag-form button {
+    padding: 5px 10px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+/* Note elements styles */
+.note-elements {
+    margin-top: 20px;
+}
+
+.note-element {
+    position: relative;
+    margin-bottom: 15px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #fff;
+}
+
+.note-element:hover {
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.element-content {
+    margin-bottom: 10px;
+}
+
+.text-content {
+    white-space: pre-wrap;
+}
+
+.image-content img {
+    max-width: 100%;
+    height: auto;
+}
+
+.element-actions {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    display: none;
+    gap: 5px;
+}
+
+.note-element:hover .element-actions {
+    display: flex;
+}
+
+.edit-btn,
+.delete-btn {
+    padding: 3px 8px;
+    font-size: 12px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.edit-btn {
+}
+
+.delete-btn {
+    background-color: #f44336;
+    color: white;
+}
+
+/* should contain 4 buttons horizontally, distributed evenly */
+.add-element-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-top: 10px;
 }
 
-.index-details {
-    margin-bottom: 20px;
+/* Edit form styles */
+.element-edit-form {
+    margin-bottom: 15px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
 }
 
-.index-details h2 {
-    margin: 0;
-    padding: 0;
+.form-group {
+    margin-bottom: 10px;
 }
 
-.index-details p {
-    margin: 5px 0;
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
 }
 
-.entries-indexes .entries-notes ul {
-    list-style: none;
-    padding: 0;
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
 }
 
-.entries-indexes .entries-notes li {
-    background: #eee;
-    margin: 5px 0;
-    padding: 10px;
+.form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
 }
+
+.form-actions button,
+.form-actions .cancel-btn {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+}
+
+.form-actions button {
+    background-color: #4caf50;
+    color: white;
+}
+
+.form-actions .cancel-btn {
+    background-color: #f44336;
+    color: white;
+}
+

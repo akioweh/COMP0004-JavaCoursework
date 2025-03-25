@@ -22,6 +22,10 @@ import java.util.UUID;
 @JsonSubTypes({
         @JsonSubTypes.Type(value = Index.class, name = "index"),
         @JsonSubTypes.Type(value = Note.class, name = "note"),
+        @JsonSubTypes.Type(value = TextElement.class, name = "text"),
+        @JsonSubTypes.Type(value = LinkElement.class, name = "link"),
+        @JsonSubTypes.Type(value = MediaElement.class, name = "media"),
+        @JsonSubTypes.Type(value = HTMLElement.class, name = "html"),
 })
 public abstract class UUIO {
     @JsonProperty("uuid")

@@ -40,4 +40,21 @@ public class MediaRenderer implements ElementRenderer<MediaElement> {
             }
         }
     }
+
+    @Override
+    public @NotNull String renderEdit(@NotNull MediaElement element) {
+        var output = "<label for=\"mediaType\">Media Type:</label>" +
+                "<select id=\"mediaType\" name=\"mediaType\" required>" +
+                "<option value=\"IMAGE\">IMAGE</option>" +
+                "<option value=\"VIDEO\">VIDEO</option>" +
+                "<option value=\"AUDIO\">AUDIO</option>" +
+                "</select>" +
+                "<label for=\"uri\">URL:</label>" +
+                "<input type=\"text\" id=\"uri\" name=\"uri\" value=\"" + element.getUri() + "\">" +
+                "<label for=\"displayText\">Display Text:</label>\n" +
+                "<input type=\"text\" id=\"displayText\" name=\"displayText\" value=\"" + element.getDisplayText() + "\">";
+        var tmp = "\"" + element.getMediaType().name() + "\"";
+        output = output.replaceFirst(tmp + ">", tmp + " selected>");
+        return output;
+    }
 }

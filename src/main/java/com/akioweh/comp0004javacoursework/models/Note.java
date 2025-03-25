@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import java.util.Vector;
 
 
@@ -119,6 +120,15 @@ public class Note extends UUIO {
     public void removeElement(int index) {
         elements.remove(index);
         modified = new Date();
+    }
+
+    public @Nullable NoteElement getElement(@NotNull UUID uuid) {
+        for (NoteElement element : elements) {
+            if (element.getUuid().equals(uuid)) {
+                return element;
+            }
+        }
+        return null;
     }
 
     public Date getCreatedDate() {
