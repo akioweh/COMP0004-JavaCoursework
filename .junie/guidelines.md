@@ -22,7 +22,10 @@ The application automatically saves changes to files, so users don't need to man
   - Jakarta MVC API 2.1.0: For implementing the MVC pattern
 - **Tomcat 11.0.4**: The embedded web server
 - **JSP (JavaServer Pages)**: For generating dynamic HTML content
-- **Jackson 2.18.3**: For JSON serialization/deserialization
+  - JSTL (JSP Standard Tag Library): For common JSP tasks
+  - EL (Expression Language): For accessing data in JSPs
+- **RESTful API**: For client-server communication following REST principles
+- **Java Serialization**: For binary serialization/deserialization of objects
 - **Maven**: For project management and build automation
 
 ## Project Structure
@@ -33,19 +36,20 @@ The project follows the standard Maven project structure:
 COMP0004-JavaCoursework/
 ├── .idea/                  # IntelliJ IDEA configuration files
 ├── .mvn/                   # Maven wrapper configuration
-├── data/                   # Application data files (JSON)
+├── data/                   # Application data files (binary serialized)
 ├── src/
 │   ├── main/
 │   │   ├── java/           # Java source code
 │   │   │   └── com/
 │   │   │       └── akioweh/
 │   │   │           └── comp0004javacoursework/
+│   │   │               ├── api/        # RESTful API endpoints
 │   │   │               ├── engine/     # Core functionality
 │   │   │               ├── main/       # Application initialization
-│   │   │               ├── models/     # Data models
+│   │   │               ├── models/     # Data models (beans)
 │   │   │               ├── renderers/  # Content rendering
-│   │   │               ├── servlets/   # HTTP request handlers
-│   │   │               └── util/       # Utility classes
+│   │   │               ├── util/       # Utility classes
+│   │   │               └── view/       # View controllers
 │   │   ├── resources/      # Application resources
 │   │   └── webapp/         # Web application files
 │   │       ├── static/     # Static resources (CSS, JS, etc.)
@@ -92,14 +96,29 @@ The Engine is implemented as a singleton, accessible via `Engine.getInstance()`.
 
 The **StorageHandler** class is responsible for:
 - Reading and writing data to and from the filesystem
-- Using Jackson for JSON serialization/deserialization
-- Storing each object in a separate JSON file named after its UUID
+- Using binary serialization for efficient storage and retrieval
+- Storing each object in a separate binary file named after its UUID
+- Providing a caching mechanism to improve performance
 
-### Servlets
+### API and View Servlets
 
-The application uses servlets as controllers to handle HTTP requests:
-- **NoteServlet**: Handles requests related to notes (create, edit, delete, view)
-- Other servlets handle different aspects of the application
+The application follows a clear separation between API endpoints and view controllers:
+
+#### API Servlets
+The API servlets handle data operations and follow RESTful principles:
+- **ApiServlet**: Base class for all API servlets, providing common functionality
+- **IndexApiServlet**: Handles CRUD operations for indexes
+- **NoteApiServlet**: Handles CRUD operations for notes
+- **ElementApiServlet**: Handles operations for note elements (text, links, media)
+
+#### View Servlets
+The view servlets handle rendering and user interface:
+- **ViewServlet**: Base class for all view servlets, providing common functionality
+- **RootViewServlet**: Renders the home page
+- **IndexViewServlet**: Renders indexes
+- **NoteViewServlet**: Renders notes
+
+This separation allows for a clean implementation of the MVC pattern, with API servlets acting as controllers for data operations and View servlets handling the presentation layer.
 
 ### JSPs
 
@@ -126,13 +145,28 @@ The application uses JSPs as views to generate HTML content:
 
 ### MVC Pattern
 
-- Keep the MVC layers separate:
-  - Models should not depend on controllers or views
-  - Controllers should not contain business logic
-  - Views should not contain business logic
-- Use servlets as controllers
-- Use JSPs as views
-- Use model classes for data representation
+The application follows the Model-View-Controller (MVC) pattern:
+
+- **Model**: The model classes (beans) represent the data and business logic
+  - Located in the `models` package
+  - Implemented as Java beans with properties and getters/setters
+  - Serializable for persistence
+
+- **View**: The views render the data for the user
+  - Implemented using JSPs with custom tags
+  - Located in the `webapp/WEB-INF/jsp` directory
+  - Use JSTL and EL (Expression Language) for dynamic content
+
+- **Controller**: The controllers handle user input and update the model
+  - Split into two types:
+    - API controllers (`api` package): Handle data operations via RESTful endpoints
+    - View controllers (`view` package): Handle rendering and user interface
+
+This separation ensures:
+- Models are independent of the presentation layer
+- Controllers focus on request handling and delegation
+- Views focus on presentation without business logic
+- Clear separation of concerns for maintainability
 
 ### Error Handling
 

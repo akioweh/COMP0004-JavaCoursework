@@ -4,7 +4,7 @@
 --%>
 <%--@elvariable id="note" type="com.akioweh.comp0004javacoursework.models.Note"--%>
 <%@ page import="com.akioweh.comp0004javacoursework.models.Note" %>
-<%@ page import="com.akioweh.comp0004javacoursework.renderers.AutoRenderer" %>
+<%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 <%@ page import="java.util.UUID" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
@@ -226,7 +226,7 @@
                         </a>
                         </c:if>
                     </div>
-                    ${element.uuid.equals(editTargetUuid) ? AutoRenderer.renderEdit(element) : AutoRenderer.render(element)}
+                    <tags:element element="${element}" noteUuid="${note.uuid}" editMode="${element.uuid.equals(editTargetUuid)}" />
                 </div>
             </c:forEach>
             <div class="add-element-container">
