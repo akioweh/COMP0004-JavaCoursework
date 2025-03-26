@@ -52,6 +52,7 @@ public class Note extends UUIO {
 
     /**
      * Constructor with title, brief, and tags.
+     * Empty tags (null, empty string, or whitespace only) will be filtered out.
      * 
      * @param title The title of the note
      * @param brief The brief description of the note
@@ -63,7 +64,9 @@ public class Note extends UUIO {
         this.modified = new Date();
         this.title = title;
         this.brief = brief;
-        this.tags = new HashSet<>(tags);
+        this.tags = tags.stream()
+                .filter(tag -> tag != null && !tag.trim().isEmpty())
+                .collect(java.util.stream.Collectors.toSet());
         this.elements = new Vector<>();
     }
 
@@ -173,21 +176,28 @@ public class Note extends UUIO {
 
     /**
      * Sets the tags of this note.
+     * Empty tags (null, empty string, or whitespace only) will be filtered out.
      * 
      * @param tags The new tags
      */
     public void setTags(@NotNull Set<String> tags) {
-        this.tags = new HashSet<>(tags);
+        this.tags = tags.stream()
+                .filter(tag -> tag != null && !tag.trim().isEmpty())
+                .collect(java.util.stream.Collectors.toSet());
         modified = new Date();
     }
 
     /**
      * Adds a tag to this note.
+     * Empty tags (null, empty string, or whitespace only) will not be added.
      * 
      * @param tag The tag to add
-     * @return true if the tag was added, false if it was already present
+     * @return true if the tag was added, false if it was already present or empty
      */
     public boolean addTag(@NotNull String tag) {
+        if (tag.trim().isEmpty()) {
+            return false;
+        }
         var res = tags.add(tag);
         if (res) {
             modified = new Date();

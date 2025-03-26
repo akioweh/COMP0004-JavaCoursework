@@ -51,7 +51,7 @@ public class NoteApiServlet extends ApiServlet {
             newNote.setTitle("New Note");
         }
 
-        if (brief != null && !brief.isEmpty()) {
+        if (brief != null) {
             newNote.setBrief(brief);
         } else {
             newNote.setBrief("New Note on " + newNote.getCreated());
@@ -59,7 +59,10 @@ public class NoteApiServlet extends ApiServlet {
 
         if (tags != null && !tags.isEmpty()) {
             var tagSet = new HashSet<>(Arrays.asList(tags.split(",")));
-            tagSet.forEach(tag -> newNote.addTag(tag.trim()));
+            tagSet.stream()
+                .map(String::trim)
+                .filter(tag -> !tag.isEmpty())
+                .forEach(newNote::addTag);
         }
 
         engine.addNote(newNote);
@@ -92,7 +95,7 @@ public class NoteApiServlet extends ApiServlet {
             note.setTitle(title);
         }
 
-        if (brief != null && !brief.isEmpty()) {
+        if (brief != null) {
             note.setBrief(brief);
         }
 

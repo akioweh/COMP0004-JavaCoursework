@@ -32,8 +32,8 @@ function updateElement(event, noteUuid, elementUuid) {
         body: requestBody
     }).then(response => {
         if (response.ok) {
-            // reload the page to see the changes, with cache-busting parameter
-            location.href = location.href.split('?')[0] + '?t=' + new Date().getTime();
+            // reload the page to see the changes
+            location.href = location.href.split('?')[0];
         } else {
             response.text().then(text => {
                 alert('Error: ' + text);
@@ -44,7 +44,7 @@ function updateElement(event, noteUuid, elementUuid) {
 
 /**
  * Adds a new element to the note
- * @param {string} beforeElementUuid - UUID of the element to insert before, or null to append
+ * @param {string | null} beforeElementUuid - UUID of the element to insert before, or null to append
  * @param {string} elementType - Type of element to add (text, html, link, media)
  */
 function addNewElement(beforeElementUuid, elementType) {
@@ -66,8 +66,8 @@ function addNewElement(beforeElementUuid, elementType) {
         body: params.toString()
     }).then(response => {
         if (response.ok) {
-            // reload the page to see the new element, with cache-busting parameter
-            location.href = location.href.split('?')[0] + '?t=' + new Date().getTime();
+            // reload the page to see the new element
+            location.href = location.href.split('?')[0];
         } else {
             response.text().then(text => {
                 alert('Error: ' + text);
@@ -87,8 +87,8 @@ function deleteElement(elementUuid) {
             method: 'DELETE'
         }).then(response => {
             if (response.ok) {
-                // reload the page to see the changes, with cache-busting parameter
-                location.href = location.href.split('?')[0] + '?t=' + new Date().getTime();
+                // reload the page to see the changes
+                location.href = location.href.split('?')[0];
             } else {
                 response.text().then(text => {
                     alert('Error: ' + text);
@@ -108,8 +108,8 @@ function deleteNote() {
             method: 'DELETE'
         }).then(response => {
             if (response.ok) {
-                // redirect to home page, with cache-busting parameter
-                window.location.href = getContextPath() + '/?t=' + new Date().getTime();
+                // redirect to home page
+                window.location.href = getContextPath() + '/';
             } else {
                 response.text().then(text => {
                     alert('Error: ' + text);
@@ -163,8 +163,8 @@ function updateNote(event) {
         body: requestBody
     }).then(response => {
         if (response.ok) {
-            // reload the page to see the changes, with cache-busting parameter
-            location.href = location.href.split('?')[0] + '?t=' + new Date().getTime();
+            // reload the page to see the changes
+            location.href = location.href.split('?')[0];
         } else {
             response.text().then(text => {
                 alert('Error: ' + text);

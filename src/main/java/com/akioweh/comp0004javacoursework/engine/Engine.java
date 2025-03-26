@@ -205,6 +205,21 @@ public class Engine implements Serializable {
                 .toList();
     }
 
+    /**
+     * Gets all unique tags from all notes in the system.
+     * Filters out empty tags.
+     *
+     * @return A list of all unique tags
+     */
+    public @NotNull List<String> getAllTags() {
+        return getNotesIn(getRootIndex()).stream()
+                .flatMap(note -> note.getTags().stream())
+                .filter(tag -> tag != null && !tag.trim().isEmpty())
+                .distinct()
+                .sorted()
+                .toList();
+    }
+
     public void saveIndex(@NotNull UUID indexUuid) {
         var index = indexCache.get(indexUuid);
         if (index == null) {

@@ -30,4 +30,16 @@ public class HTMLElement extends TextElement {
     public HTMLElement(@NotNull String html) {
         super(html);
     }
+
+    /**
+     * Extracts searchable text from this element.
+     * For HTML elements, this strips HTML tags to get plain text.
+     * 
+     * @return The plain text content of this HTML element
+     */
+    @Override
+    public @NotNull String extractSearchableText() {
+        // Simple HTML tag stripping - could be improved with a proper HTML parser
+        return getContent().replaceAll("<[^>]*>", " ").replaceAll("\\s+", " ").trim();
+    }
 }

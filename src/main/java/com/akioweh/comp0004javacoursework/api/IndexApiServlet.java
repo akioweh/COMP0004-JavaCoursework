@@ -127,7 +127,7 @@ public class IndexApiServlet extends ApiServlet {
                 newIndex.setName("New Index");
             }
 
-            if (description != null && !description.isEmpty()) {
+            if (description != null) {
                 newIndex.setDescription(description);
             } else {
                 newIndex.setDescription("New Index created on " + new Date());
@@ -155,6 +155,12 @@ public class IndexApiServlet extends ApiServlet {
         Index index = (Index) indexAndEntry[0];
         UUIO entry = (UUIO) indexAndEntry[1];
 
+        // Check if this is the root index
+        if (index.getUuid().equals(engine.getRootIndex().getUuid())) {
+            sendBadRequest(response, "Cannot manually add entries to the root index. The root index automatically contains all existing notes and indexes.");
+            return;
+        }
+
         index.addEntry(entry);
         engine.saveIndex(index.getUuid());
 
@@ -172,6 +178,12 @@ public class IndexApiServlet extends ApiServlet {
 
         Index index = (Index) indexAndEntry[0];
 
+        // Check if this is the root index
+        if (index.getUuid().equals(engine.getRootIndex().getUuid())) {
+            sendBadRequest(response, "Cannot update the root index");
+            return;
+        }
+
         // Update index properties
         String name = request.getParameter("name");
         String description = request.getParameter("description");
@@ -180,7 +192,7 @@ public class IndexApiServlet extends ApiServlet {
             index.setName(name);
         }
 
-        if (description != null && !description.isEmpty()) {
+        if (description != null) {
             index.setDescription(description);
         }
 
@@ -208,6 +220,12 @@ public class IndexApiServlet extends ApiServlet {
         }
 
         if (entryUuid != null) {
+            // Check if this is the root index
+            if (indexUuid.equals(engine.getRootIndex().getUuid())) {
+                sendBadRequest(response, "Cannot remove entries from the root index. The root index must always contain all existing notes and indexes.");
+                return;
+            }
+
             // Remove an entry from the index
             UUIO entry = engine.get(entryUuid);
             if (entry == null) {

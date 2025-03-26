@@ -56,4 +56,15 @@ public class TextElement extends NoteElement {
     public void setContent(@NotNull String content) {
         this.content = content;
     }
+
+    /**
+     * Extracts searchable text from this element.
+     * For text elements, this is simply the content.
+     * 
+     * @return The content of this text element
+     */
+    @Override
+    public @NotNull String extractSearchableText() {
+        return getContent();
+    }
 }

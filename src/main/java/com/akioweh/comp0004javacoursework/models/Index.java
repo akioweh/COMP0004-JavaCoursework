@@ -1,6 +1,8 @@
 package com.akioweh.comp0004javacoursework.models;
 
+import com.akioweh.comp0004javacoursework.util.NoteFilterSorter;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.io.Serial;
@@ -25,6 +27,15 @@ public class Index extends UUIO {
     private String description;
     private List<UUID> entries;
 
+    // Dynamic index properties
+    private boolean isDynamic;
+    @Nullable
+    private String searchTerm;
+    @Nullable
+    private String tag;
+    @Nullable
+    private NoteFilterSorter.SortOption sortOption;
+
     /**
      * Default constructor required for JavaBeans.
      */
@@ -33,6 +44,10 @@ public class Index extends UUIO {
         this.name = "";
         this.description = "";
         this.entries = new Vector<>();
+        this.isDynamic = false;
+        this.searchTerm = null;
+        this.tag = null;
+        this.sortOption = null;
     }
 
     /**
@@ -46,6 +61,32 @@ public class Index extends UUIO {
         this.name = name;
         this.description = description;
         this.entries = new Vector<>();
+        this.isDynamic = false;
+        this.searchTerm = null;
+        this.tag = null;
+        this.sortOption = null;
+    }
+
+    /**
+     * Constructor for dynamic index.
+     *
+     * @param name        The name of the index
+     * @param description The description of the index
+     * @param searchTerm  The search term to filter notes by
+     * @param tag         The tag to filter notes by
+     * @param sortOption  The sort option to use
+     */
+    public Index(@NotNull String name, @NotNull String description, 
+                 @Nullable String searchTerm, @Nullable String tag, 
+                 @Nullable NoteFilterSorter.SortOption sortOption) {
+        super();
+        this.name = name;
+        this.description = description;
+        this.entries = new Vector<>();
+        this.isDynamic = true;
+        this.searchTerm = searchTerm;
+        this.tag = tag;
+        this.sortOption = sortOption;
     }
 
     /**
@@ -138,4 +179,75 @@ public class Index extends UUIO {
         entries.remove(item.getUuid());
     }
 
+    /**
+     * Checks if this index is dynamic.
+     *
+     * @return true if this index is dynamic, false otherwise
+     */
+    public boolean isDynamic() {
+        return isDynamic;
+    }
+
+    /**
+     * Sets whether this index is dynamic.
+     *
+     * @param dynamic true if this index is dynamic, false otherwise
+     */
+    public void setDynamic(boolean dynamic) {
+        isDynamic = dynamic;
+    }
+
+    /**
+     * Gets the search term of this dynamic index.
+     *
+     * @return The search term, or null if not set
+     */
+    public @Nullable String getSearchTerm() {
+        return searchTerm;
+    }
+
+    /**
+     * Sets the search term of this dynamic index.
+     *
+     * @param searchTerm The new search term
+     */
+    public void setSearchTerm(@Nullable String searchTerm) {
+        this.searchTerm = searchTerm;
+    }
+
+    /**
+     * Gets the tag of this dynamic index.
+     *
+     * @return The tag, or null if not set
+     */
+    public @Nullable String getTag() {
+        return tag;
+    }
+
+    /**
+     * Sets the tag of this dynamic index.
+     *
+     * @param tag The new tag
+     */
+    public void setTag(@Nullable String tag) {
+        this.tag = tag;
+    }
+
+    /**
+     * Gets the sort option of this dynamic index.
+     *
+     * @return The sort option, or null if not set
+     */
+    public @Nullable NoteFilterSorter.SortOption getSortOption() {
+        return sortOption;
+    }
+
+    /**
+     * Sets the sort option of this dynamic index.
+     *
+     * @param sortOption The new sort option
+     */
+    public void setSortOption(@Nullable NoteFilterSorter.SortOption sortOption) {
+        this.sortOption = sortOption;
+    }
 }

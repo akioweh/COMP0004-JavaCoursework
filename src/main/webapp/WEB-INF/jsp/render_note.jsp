@@ -24,7 +24,7 @@
     <div id="main">
         <div id="note-view">
             <div class="note-actions">
-                <button onclick="editNote()">Edit Note</button>
+                <button onclick="editNote()">Edit Details</button>
                 <button onclick="deleteNote()">Delete Note</button>
             </div>
             <h2>${note.title}</h2>
@@ -37,11 +37,18 @@
                 <div id="tags-list">
                     <h3>Tags:</h3>
                     <ul>
-                        <c:forEach var="tag" items="${note.tags}">
-                        <li>
-                            ${tag}
-                        </li>
-                        </c:forEach>
+                        <c:choose>
+                            <c:when test="${empty note.tags}">
+                                <p class="empty-tags-message">none</p>
+                            </c:when>
+                            <c:otherwise>
+                                <c:forEach var="tag" items="${note.tags}">
+                                <li>
+                                    ${tag}
+                                </li>
+                                </c:forEach>
+                            </c:otherwise>
+                        </c:choose>
                     </ul>
                 </div>
                 <div id="note-brief">
@@ -60,7 +67,7 @@
                 </div>
                 <div class="form-group">
                     <label for="brief">Brief Description:</label>
-                    <textarea id="brief" name="brief" rows="3" required>${note.brief}</textarea>
+                    <textarea id="brief" name="brief" rows="3">${note.brief}</textarea>
                 </div>
                 <div class="form-group">
                     <label for="tags">Tags (comma separated):</label>
@@ -78,18 +85,20 @@
             <c:forEach var="element" items="${note.elements}">
                 <c:if test="${not editMode}">
                 <div class="add-element-container">
-                    <button class="add-element-btn" onclick="addNewElement('${element.uuid}', 'text')" type="button">
-                        Add Text Element
-                    </button>
-                    <button class="add-element-btn" onclick="addNewElement('${element.uuid}', 'html')" type="button">
-                        Add HTML Element
-                    </button>
-                    <button class="add-element-btn" onclick="addNewElement('${element.uuid}', 'link')" type="button">
-                        Add Link Element
-                    </button>
-                    <button class="add-element-btn" onclick="addNewElement('${element.uuid}', 'media')" type="button">
-                        Add Media Element
-                    </button>
+                    <div class="button-container">
+                        <button class="add-element-btn" onclick="addNewElement('${element.uuid}', 'text')" type="button">
+                            Add Text Element
+                        </button>
+                        <button class="add-element-btn" onclick="addNewElement('${element.uuid}', 'html')" type="button">
+                            Add HTML Element
+                        </button>
+                        <button class="add-element-btn" onclick="addNewElement('${element.uuid}', 'link')" type="button">
+                            Add Link Element
+                        </button>
+                        <button class="add-element-btn" onclick="addNewElement('${element.uuid}', 'media')" type="button">
+                            Add Media Element
+                        </button>
+                    </div>
                 </div>
                 </c:if>
                 <div class="note-element">
@@ -107,18 +116,20 @@
                 </div>
             </c:forEach>
             <div class="add-element-container">
-                <button class="add-element-btn" onclick="addNewElement(null, 'text')" type="button">
-                    Add Text Element
-                </button>
-                <button class="add-element-btn" onclick="addNewElement(null, 'html')" type="button">
-                    Add HTML Element
-                </button>
-                <button class="add-element-btn" onclick="addNewElement(null, 'link')" type="button">
-                    Add Link Element
-                </button>
-                <button class="add-element-btn" onclick="addNewElement(null, 'media')" type="button">
-                    Add Media Element
-                </button>
+                <div class="button-container">
+                    <button class="add-element-btn" onclick="addNewElement(null, 'text')" type="button">
+                        Add Text Element
+                    </button>
+                    <button class="add-element-btn" onclick="addNewElement(null, 'html')" type="button">
+                        Add HTML Element
+                    </button>
+                    <button class="add-element-btn" onclick="addNewElement(null, 'link')" type="button">
+                        Add Link Element
+                    </button>
+                    <button class="add-element-btn" onclick="addNewElement(null, 'media')" type="button">
+                        Add Media Element
+                    </button>
+                </div>
             </div>
         </div>
 

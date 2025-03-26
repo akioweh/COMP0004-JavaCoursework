@@ -98,4 +98,15 @@ public class LinkElement extends NoteElement {
     public void setDisplayText(@NotNull String displayText) {
         this.displayText = displayText;
     }
+
+    /**
+     * Extracts searchable text from this element.
+     * For link elements, this includes both the display text and the URI.
+     * 
+     * @return The display text and URI of this link element
+     */
+    @Override
+    public @NotNull String extractSearchableText() {
+        return getDisplayText() + " " + getUri().toString();
+    }
 }

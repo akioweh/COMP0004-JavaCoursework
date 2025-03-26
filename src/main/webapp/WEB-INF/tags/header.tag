@@ -13,6 +13,7 @@
         <nav>
             <ul>
                 <li><a href="${pageContext.request.contextPath}/">Home</a></li>
+                <li><a href="${pageContext.request.contextPath}/search">Search</a></li>
                 <li><button onclick="newNote()">New Note</button></li>
                 <c:if test="${showNewIndex}">
                     <li><button onclick="newIndex()">New Index</button></li>

@@ -60,4 +60,12 @@ public abstract class NoteElement extends UUIO {
     public void setSectionTag(@NotNull String sectionTag) {
         this.sectionTag = sectionTag;
     }
+
+    /**
+     * Extracts searchable text from this element.
+     * This method is used for text search functionality.
+     * 
+     * @return The searchable text from this element
+     */
+    public abstract @NotNull String extractSearchableText();
 }
