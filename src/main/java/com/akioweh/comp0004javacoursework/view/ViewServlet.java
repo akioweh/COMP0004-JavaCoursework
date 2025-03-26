@@ -1,6 +1,7 @@
 package com.akioweh.comp0004javacoursework.view;
 
 import com.akioweh.comp0004javacoursework.engine.Engine;
+import jakarta.inject.Inject;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,7 +17,8 @@ import java.util.logging.Logger;
  */
 public abstract class ViewServlet extends HttpServlet {
     protected static final Logger logger = Logger.getLogger(ViewServlet.class.getName());
-    protected final Engine engine = Engine.getInstance();
+    @Inject
+    protected Engine engine;
 
     /**
      * Forwards the request to a JSP page.

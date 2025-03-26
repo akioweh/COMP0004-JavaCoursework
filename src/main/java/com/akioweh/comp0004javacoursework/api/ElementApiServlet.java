@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.UUID;
 
+
 /**
  * API servlet for handling element operations.
  * Follows RESTful principles:
@@ -25,7 +26,7 @@ import java.util.UUID;
  * - POST: Create a new element
  * - PUT: Update an existing element
  * - DELETE: Delete an element
- * 
+ * <p>
  * Path format: /api/element/{noteUuid}/{elementUuid}
  * For POST requests (creating new elements), the elementUuid is optional.
  * If provided, the new element will be inserted before the specified element.
@@ -37,7 +38,7 @@ public class ElementApiServlet extends ApiServlet {
      * Parses the note UUID and element UUID from the path info.
      * The path info is expected to be in the format "/{noteUuid}/{elementUuid}".
      * For POST requests (creating new elements), the elementUuid is optional.
-     * 
+     *
      * @param request The HTTP request
      * @return An array containing the note UUID and element UUID (may be null)
      */
@@ -58,14 +59,14 @@ public class ElementApiServlet extends ApiServlet {
         }
 
         UUID elementUuid = parts.length > 1 ? Util.parseUUID(parts[1]) : null;
-        return new UUID[] { noteUuid, elementUuid };
+        return new UUID[]{noteUuid, elementUuid};
     }
 
     /**
      * Gets the note and element from the path info.
-     * 
-     * @param request The HTTP request
-     * @param response The HTTP response
+     *
+     * @param request        The HTTP request
+     * @param response       The HTTP response
      * @param requireElement Whether the element is required
      * @return An array containing the note and element (may be null)
      * @throws IOException If an I/O error occurs
@@ -97,7 +98,7 @@ public class ElementApiServlet extends ApiServlet {
             return null;
         }
 
-        return new Object[] { note, element };
+        return new Object[]{note, element};
     }
 
 
@@ -134,6 +135,12 @@ public class ElementApiServlet extends ApiServlet {
 
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Debug logging to see what parameters are being received
+        logger.info("[DEBUG_LOG] ElementApiServlet.doPut: Request parameters:");
+        request.getParameterMap().forEach((key, value) ->
+                logger.info("[DEBUG_LOG] " + key + " = " + String.join(", ", value))
+        );
+
         Object[] noteAndElement = getNoteAndElement(request, response, true);
         if (noteAndElement == null) {
             return;
@@ -143,17 +150,15 @@ public class ElementApiServlet extends ApiServlet {
         NoteElement element = (NoteElement) noteAndElement[1];
 
         // Update the element based on its type
-        if (element instanceof TextElement) {
-            updateTextElement((TextElement) element, request);
-        } else if (element instanceof LinkElement) {
-            updateLinkElement((LinkElement) element, request);
-        } else if (element instanceof HTMLElement) {
-            updateHTMLElement((HTMLElement) element, request);
-        } else if (element instanceof MediaElement) {
-            updateMediaElement((MediaElement) element, request);
-        } else {
-            sendBadRequest(response, "Unsupported element type");
-            return;
+        switch (element) {
+            case HTMLElement htmlElement -> updateHTMLElement(htmlElement, request);
+            case TextElement textElement -> updateTextElement(textElement, request);
+            case MediaElement mediaElement -> updateMediaElement(mediaElement, request);
+            case LinkElement linkElement -> updateLinkElement(linkElement, request);
+            case null, default -> {
+                sendBadRequest(response, "Unsupported element type");
+                return;
+            }
         }
 
         // Save the note
@@ -183,15 +188,17 @@ public class ElementApiServlet extends ApiServlet {
 
     /**
      * Creates a new element based on the element type.
-     * 
+     *
      * @param elementType The type of element to create
-     * @param request The HTTP request containing element parameters
+     * @param request     The HTTP request containing element parameters
      * @return The new element, or null if the element type is invalid
      */
     private @Nullable NoteElement createElement(@NotNull String elementType, HttpServletRequest request) {
         return switch (elementType) {
-            case "text" -> new TextElement(request.getParameter("content") != null ? request.getParameter("content") : "");
-            case "html" -> new HTMLElement(request.getParameter("content") != null ? request.getParameter("content") : "");
+            case "text" ->
+                    new TextElement(request.getParameter("content") != null ? request.getParameter("content") : "");
+            case "html" ->
+                    new HTMLElement(request.getParameter("content") != null ? request.getParameter("content") : "");
             case "link" -> {
                 String url = request.getParameter("url") != null ? request.getParameter("url") : "https://example.com";
                 String displayText = request.getParameter("displayText") != null ? request.getParameter("displayText") : url;
@@ -235,7 +242,7 @@ public class ElementApiServlet extends ApiServlet {
 
     /**
      * Updates a text element with the parameters from the request.
-     * 
+     *
      * @param element The text element to update
      * @param request The HTTP request containing element parameters
      */
@@ -253,7 +260,7 @@ public class ElementApiServlet extends ApiServlet {
 
     /**
      * Updates a link element with the parameters from the request.
-     * 
+     *
      * @param element The link element to update
      * @param request The HTTP request containing element parameters
      */
@@ -283,7 +290,7 @@ public class ElementApiServlet extends ApiServlet {
 
     /**
      * Updates an HTML element with the parameters from the request.
-     * 
+     *
      * @param element The HTML element to update
      * @param request The HTTP request containing element parameters
      */
@@ -301,7 +308,7 @@ public class ElementApiServlet extends ApiServlet {
 
     /**
      * Updates a media element with the parameters from the request.
-     * 
+     *
      * @param element The media element to update
      * @param request The HTTP request containing element parameters
      */

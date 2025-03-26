@@ -1,7 +1,3 @@
-<%--
-  Author: akioweh
-  24/03/2025 2:27 am
---%>
 <%--@elvariable id="note" type="com.akioweh.comp0004javacoursework.models.Note"--%>
 <%--@elvariable id="noteViewState" type="com.akioweh.comp0004javacoursework.view.NoteViewState"--%>
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>

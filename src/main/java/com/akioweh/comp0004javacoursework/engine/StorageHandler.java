@@ -3,6 +3,10 @@ package com.akioweh.comp0004javacoursework.engine;
 import com.akioweh.comp0004javacoursework.models.Index;
 import com.akioweh.comp0004javacoursework.models.Note;
 import com.akioweh.comp0004javacoursework.models.UUIO;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.inject.Singleton;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.FileInputStream;
@@ -10,6 +14,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.nio.file.Path;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -26,11 +31,14 @@ import java.util.logging.Logger;
  * <br>
  * Uses standard Java serialization for object persistence.
  * <p>
- * While this class is not enforced as a singleton,
- * the program uses it as such (see Engine).
- * </p>
+ * This is also a singleton class managed by CDI.
+ * (Although it is only ever instantiated once by Engine anyway)
+ * <p>
+ * The entire class is package-private as it
+ * should not be interfaced by anything other than Engine.
  */
-public class StorageHandler {
+@Singleton
+class StorageHandler implements Serializable {
     private static final Logger logger = Logger.getLogger(StorageHandler.class.getName());
     protected Path localStoragePath;
     protected Path localMediaStoragePath;
@@ -41,10 +49,10 @@ public class StorageHandler {
      * @param localStoragePath Path to store serialized objects
      * @param localMediaStoragePath Path to store media files
      */
-    public StorageHandler(String localStoragePath, String localMediaStoragePath) {
-        // we check for path validity here to throw clearer errors if any
-        this.localStoragePath = Path.of(localStoragePath);
-        this.localMediaStoragePath = Path.of(localMediaStoragePath);
+    @Inject
+    StorageHandler(@Named("localStoragePath") Path localStoragePath, @Named("localMediaStoragePath") Path localMediaStoragePath) {
+        this.localStoragePath = localStoragePath;
+        this.localMediaStoragePath = localMediaStoragePath;
 
         // check path validity; create directories if they do not exist
         if (!this.localStoragePath.toFile().exists()) {
@@ -67,7 +75,7 @@ public class StorageHandler {
      * @param uuid UUID of the object to read
      * @return The object, or null if not found or error
      */
-    public UUIO read(@NotNull UUID uuid) {
+    UUIO read(@NotNull UUID uuid) {
         String fileName = uuid + ".ser";
         Path filePath = localStoragePath.resolve(fileName);
         if (!filePath.toFile().exists()) {
@@ -89,15 +97,21 @@ public class StorageHandler {
      * 
      * @param data The object to write
      */
-    public void write(@NotNull UUIO data) {
+    void write(@NotNull UUIO data) {
         String fileName = data.getUuid() + ".ser";
         Path filePath = localStoragePath.resolve(fileName);
 
+        logger.info("[DEBUG_LOG] StorageHandler.write: Writing data with UUID " + data.getUuid());
+        logger.info("[DEBUG_LOG] StorageHandler.write: File path: " + filePath);
+        logger.info("[DEBUG_LOG] StorageHandler.write: Data type: " + data.getClass().getSimpleName());
+
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filePath.toFile()))) {
             oos.writeObject(data);
+            logger.info("[DEBUG_LOG] StorageHandler.write: Data written successfully");
         } catch (IOException e) {
             logger.severe("Failed to write data file: " + filePath);
             logger.log(Level.SEVERE, e.getMessage(), e);
+            logger.info("[DEBUG_LOG] StorageHandler.write: Failed to write data: " + e.getMessage());
         }
     }
 
@@ -106,7 +120,7 @@ public class StorageHandler {
      * 
      * @param uuid UUID of the object to delete
      */
-    public void delete(@NotNull UUID uuid) {
+    void delete(@NotNull UUID uuid) {
         String fileName = uuid + ".ser";
         Path filePath = localStoragePath.resolve(fileName);
         if (filePath.toFile().exists()) {
@@ -124,7 +138,7 @@ public class StorageHandler {
      * @param uuid UUID of the object to check
      * @return true if the object exists, false otherwise
      */
-    public boolean exists(@NotNull UUID uuid) {
+    boolean exists(@NotNull UUID uuid) {
         String fileName = uuid + ".ser";
         Path filePath = localStoragePath.resolve(fileName);
         return filePath.toFile().exists();
@@ -136,7 +150,7 @@ public class StorageHandler {
      * @param uuid UUID of the note to read
      * @return The note, or null if not found or error
      */
-    public Note readNote(@NotNull UUID uuid) {
+    Note readNote(@NotNull UUID uuid) {
         return (Note) read(uuid);
     }
 
@@ -145,7 +159,7 @@ public class StorageHandler {
      * 
      * @param note The note to write
      */
-    public void writeNote(@NotNull Note note) {
+    void writeNote(@NotNull Note note) {
         write(note);
     }
 
@@ -154,7 +168,7 @@ public class StorageHandler {
      * 
      * @param uuid UUID of the note to delete
      */
-    public void deleteNote(@NotNull UUID uuid) {
+    void deleteNote(@NotNull UUID uuid) {
         delete(uuid);
     }
 
@@ -164,7 +178,7 @@ public class StorageHandler {
      * @param uuid UUID of the index to read
      * @return The index, or null if not found or error
      */
-    public Index readIndex(@NotNull UUID uuid) {
+    Index readIndex(@NotNull UUID uuid) {
         return (Index) read(uuid);
     }
 
@@ -173,7 +187,7 @@ public class StorageHandler {
      * 
      * @param index The index to write
      */
-    public void writeIndex(@NotNull Index index) {
+    void writeIndex(@NotNull Index index) {
         write(index);
     }
 
@@ -182,7 +196,11 @@ public class StorageHandler {
      * 
      * @param uuid UUID of the index to delete
      */
-    public void deleteIndex(@NotNull UUID uuid) {
+    void deleteIndex(@NotNull UUID uuid) {
         delete(uuid);
+    }
+
+    public Path getLocalStoragePath() {
+        return localStoragePath;
     }
 }

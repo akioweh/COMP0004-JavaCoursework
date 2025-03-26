@@ -1,6 +1,7 @@
 package com.akioweh.comp0004javacoursework.models;
 
 import com.akioweh.comp0004javacoursework.engine.Engine;
+import jakarta.inject.Inject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnmodifiableView;
 
@@ -38,8 +39,8 @@ public class Index extends UUIO {
 
     /**
      * Constructor with name and description.
-     * 
-     * @param name The name of the index
+     *
+     * @param name        The name of the index
      * @param description The description of the index
      */
     public Index(@NotNull String name, @NotNull String description) {
@@ -51,7 +52,7 @@ public class Index extends UUIO {
 
     /**
      * Gets the name of this index.
-     * 
+     *
      * @return The name
      */
     public @NotNull String getName() {
@@ -60,7 +61,7 @@ public class Index extends UUIO {
 
     /**
      * Sets the name of this index.
-     * 
+     *
      * @param name The new name
      */
     public void setName(@NotNull String name) {
@@ -69,7 +70,7 @@ public class Index extends UUIO {
 
     /**
      * Gets the description of this index.
-     * 
+     *
      * @return The description
      */
     public @NotNull String getDescription() {
@@ -78,7 +79,7 @@ public class Index extends UUIO {
 
     /**
      * Sets the description of this index.
-     * 
+     *
      * @param description The new description
      */
     public void setDescription(@NotNull String description) {
@@ -87,7 +88,7 @@ public class Index extends UUIO {
 
     /**
      * Gets an unmodifiable view of the UUIDs of the entries in this index.
-     * 
+     *
      * @return The UUIDs of the entries
      */
     public @NotNull @UnmodifiableView List<UUID> getEntriesUuid() {
@@ -96,7 +97,7 @@ public class Index extends UUIO {
 
     /**
      * Sets the entries of this index by their UUIDs.
-     * 
+     *
      * @param entries The new entries
      */
     public void setEntriesUuid(@NotNull List<UUID> entries) {
@@ -104,17 +105,8 @@ public class Index extends UUIO {
     }
 
     /**
-     * Gets the entries in this index as UUIO objects.
-     * 
-     * @return The entries
-     */
-    public @NotNull List<UUIO> getEntries() {
-        return entries.stream().map(Engine.getInstance()::get).toList();
-    }
-
-    /**
      * Adds an entry to this index by its UUID.
-     * 
+     *
      * @param item The UUID of the entry to add
      */
     public void addEntry(@NotNull UUID item) {
@@ -123,7 +115,7 @@ public class Index extends UUIO {
 
     /**
      * Adds an entry to this index.
-     * 
+     *
      * @param item The entry to add
      */
     public void addEntry(@NotNull UUIO item) {
@@ -132,7 +124,7 @@ public class Index extends UUIO {
 
     /**
      * Removes an entry from this index by its UUID.
-     * 
+     *
      * @param item The UUID of the entry to remove
      */
     public void removeEntry(@NotNull UUID item) {
@@ -141,34 +133,11 @@ public class Index extends UUIO {
 
     /**
      * Removes an entry from this index.
-     * 
+     *
      * @param item The entry to remove
      */
     public void removeEntry(@NotNull UUIO item) {
         entries.remove(item.getUuid());
     }
 
-    /**
-     * Gets the notes in this index.
-     * 
-     * @return The notes
-     */
-    public List<Note> getNotes() {
-        return getEntries().stream()
-                .filter(o -> o instanceof Note)
-                .map(o -> (Note) o)
-                .toList();
-    }
-
-    /**
-     * Gets the indexes in this index.
-     * 
-     * @return The indexes
-     */
-    public List<Index> getIndexes() {
-        return getEntries().stream()
-                .filter(o -> o instanceof Index)
-                .map(o -> (Index) o)
-                .toList();
-    }
 }

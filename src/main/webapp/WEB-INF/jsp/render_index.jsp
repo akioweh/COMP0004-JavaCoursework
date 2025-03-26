@@ -1,10 +1,5 @@
-<%--
-  Author: akioweh
-  23/03/2025 7:35 am
---%>
 <%--@elvariable id="index" type="com.akioweh.comp0004javacoursework.models.Index"--%>
 <%@ page contentType="text/html;charset=UTF-8" %>
-<%@ page import="com.akioweh.comp0004javacoursework.engine.Engine" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
@@ -27,7 +22,7 @@
         <div id="index-view">
             <div class="index-actions">
                 <button onclick="editIndex()">Edit Index</button>
-                <c:if test="${!index.uuid.equals(Engine.getInstance().rootIndex.uuid)}">
+                <c:if test="${!index.uuid.equals(engine.rootIndex.uuid)}">
                 <button onclick="deleteIndex()">Delete Index</button>
                 </c:if>
                 <button onclick="newIndex()">New Index</button>
@@ -39,7 +34,7 @@
             <h3>Note Entries:</h3>
             <div class="entries-notes">
                 <ol>
-                    <c:forEach var="entry" items="${index.notes}">
+                    <c:forEach var="entry" items="${engine.getNotesIn(index)}">
                     <li>
                         <a href="note/${entry.uuid}">
                             ${entry.title}
@@ -54,7 +49,7 @@
             <h3>Index Entries</h3>
             <div class="entries-indexes">
                 <ol>
-                    <c:forEach var="entry" items="${index.indexes}">
+                    <c:forEach var="entry" items="${engine.getIndexesIn(index)}">
                         <c:if test="${!entry.equals(index)}">
                         <li>
                             <a href="index/${entry.uuid}">

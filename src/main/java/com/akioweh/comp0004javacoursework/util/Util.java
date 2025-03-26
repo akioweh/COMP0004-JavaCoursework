@@ -6,7 +6,7 @@ import java.util.UUID;
 
 
 public class Util {
-    public static @Nullable UUID parseUUID(String uuidString) {
+    public static @Nullable UUID parseUUID(@Nullable String uuidString) {
         if (uuidString == null || uuidString.isEmpty()) {
             return null;
         }

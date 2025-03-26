@@ -471,17 +471,25 @@ p {
     transform: scale(1.01);
 }
 
-.media-image {
+.media-image, .media-video, .media-audio {
     max-width: 100%;
     height: auto;
     display: block;
     border-radius: var(--radius-sm);
+    /* Prevent the media content from scaling on hover */
+    transform: scale(0.99);
+    transition: transform var(--transition-fast);
+}
+
+.media-element:hover .media-image,
+.media-element:hover .media-video,
+.media-element:hover .media-audio {
+    /* Counter the parent's scale effect to keep media at original size */
+    transform: scale(1);
 }
 
 .media-video, .media-audio {
     width: 100%;
-    max-width: 100%;
-    border-radius: var(--radius-sm);
 }
 
 .media-caption {
@@ -499,26 +507,61 @@ p {
     flex-wrap: wrap;
     gap: var(--spacing-sm);
     margin: var(--spacing-md) 0;
-    padding: var(--spacing-md);
+    padding: var(--spacing-xs);
     background-color: rgba(98, 0, 234, 0.03);
     border-radius: var(--radius-md);
     border: 1px dashed rgba(98, 0, 234, 0.2);
     justify-content: center;
+    position: relative;
+    height: 10px; /* Slim height when not hovered */
+    overflow: hidden;
+    transition: all var(--transition-normal);
+}
+
+.add-element-container:before {
+    content: "Add elements (hover to reveal)";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 0.8rem;
+    color: var(--primary);
+    opacity: 0.7;
+    white-space: nowrap;
+    pointer-events: none;
+    transition: opacity var(--transition-fast);
+}
+
+.add-element-container:hover {
+    height: auto;
+    padding: var(--spacing-md);
+}
+
+.add-element-container:hover:before {
+    opacity: 0;
 }
 
 .add-element-btn {
     flex: 1;
-    min-width: 150px;
+    min-width: 120px;
     text-align: center;
-    padding: var(--spacing-sm) var(--spacing-md);
+    padding: var(--spacing-xs) var(--spacing-sm);
     border-radius: var(--radius-sm);
     font-weight: 500;
     transition: all var(--transition-fast);
     box-shadow: var(--shadow-sm);
+    font-size: 0.9rem;
+    opacity: 0;
+    transform: translateY(10px);
+}
+
+.add-element-container:hover .add-element-btn {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .add-element-btn:hover {
-    transform: translateY(-2px);
+    transform: translateY(-2px) !important;
     box-shadow: var(--shadow-md);
 }
 

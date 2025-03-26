@@ -72,6 +72,12 @@ public class NoteApiServlet extends ApiServlet {
 
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Debug logging to see what parameters are being received
+        logger.info("[DEBUG_LOG] NoteApiServlet.doPut: Request parameters:");
+        request.getParameterMap().forEach((key, value) -> 
+            logger.info("[DEBUG_LOG] " + key + " = " + String.join(", ", value))
+        );
+
         UUID uuid = getUuidFromPath(request);
         if (uuid == null) {
             sendBadRequest(response, "Note UUID is required");

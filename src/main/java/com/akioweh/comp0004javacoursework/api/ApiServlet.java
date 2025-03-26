@@ -2,6 +2,7 @@ package com.akioweh.comp0004javacoursework.api;
 
 import com.akioweh.comp0004javacoursework.engine.Engine;
 import com.akioweh.comp0004javacoursework.util.Util;
+import jakarta.inject.Inject;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,7 +20,8 @@ import java.util.logging.Logger;
  */
 public abstract class ApiServlet extends HttpServlet {
     protected static final Logger logger = Logger.getLogger(ApiServlet.class.getName());
-    protected final Engine engine = Engine.getInstance();
+    @Inject
+    protected Engine engine;
 
     /**
      * Parses a UUID from the path info of the request.

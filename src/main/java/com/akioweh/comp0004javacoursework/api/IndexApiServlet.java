@@ -29,7 +29,6 @@ import java.util.UUID;
  */
 @WebServlet(name = "Index API", urlPatterns = {"/api/index/*", "/api/index/entry/*"})
 public class IndexApiServlet extends ApiServlet {
-
     /**
      * Renders an index by forwarding to the index view servlet.
      *
@@ -130,7 +129,7 @@ public class IndexApiServlet extends ApiServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         UUID[] uuids = getUuidsFromPath(request);
         if (uuids == null) {
             // Create a new index
@@ -183,7 +182,13 @@ public class IndexApiServlet extends ApiServlet {
     }
 
     @Override
-    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        // Debug logging to see what parameters are being received
+        logger.info("[DEBUG_LOG] IndexApiServlet.doPut: Request parameters:");
+        request.getParameterMap().forEach((key, value) -> 
+            logger.info("[DEBUG_LOG] " + key + " = " + String.join(", ", value))
+        );
+
         Object[] indexAndEntry = getIndexAndEntry(request, response, false);
         if (indexAndEntry == null) {
             return;
@@ -210,7 +215,7 @@ public class IndexApiServlet extends ApiServlet {
     }
 
     @Override
-    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
         UUID[] uuids = getUuidsFromPath(request);
         if (uuids == null) {
             sendBadRequest(response, "Invalid path format");

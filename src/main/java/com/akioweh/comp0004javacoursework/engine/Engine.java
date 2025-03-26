@@ -3,9 +3,18 @@ package com.akioweh.comp0004javacoursework.engine;
 import com.akioweh.comp0004javacoursework.models.Index;
 import com.akioweh.comp0004javacoursework.models.Note;
 import com.akioweh.comp0004javacoursework.models.UUIO;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.inject.Singleton;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.Serializable;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 import java.util.logging.Logger;
 
@@ -24,11 +33,14 @@ import java.util.logging.Logger;
  * or delete disk data according to memory-state changes.
  * </p>
  * <p>
- * <strong>Engine is an enforced singleton class.</strong>
+ * <strong>Engine is a singleton class managed by CDI.</strong>
  * </p>
  */
-public class Engine {
-    private static Engine instance;
+@Named
+@Singleton
+public class Engine implements Serializable {
+    private static final Logger logger = Logger.getLogger(Engine.class.getName());
+    private static boolean initialized = false;
     private final StorageHandler storageHandler;
     private final HashMap<UUID, Note> noteCache = new HashMap<>();
     private final HashMap<UUID, Index> indexCache = new HashMap<>();
@@ -40,25 +52,41 @@ public class Engine {
     @NotNull
     private final UUID rootIndexUuid;
 
-    private Engine(String localStoragePath, String localMediaStoragePath, @NotNull UUID rootIndexUuid) {
-        this.storageHandler = new StorageHandler(localStoragePath, localMediaStoragePath);
-        this.rootIndexUuid = rootIndexUuid;
-    }
-
-    public static void init(String localStoragePath, String localMediaStoragePath, UUID rootIndexUuid) {
-        if (instance == null) {
-            instance = new Engine(localStoragePath, localMediaStoragePath, rootIndexUuid);
-            Logger.getLogger(Engine.class.getName()).info("Engine initialized with storage path: " + localStoragePath);
-        } else {
+    @Inject
+    Engine(StorageHandler storageHandler) {
+        if (initialized) {  // just in case CDI is misconfigured
             throw new IllegalStateException("Engine is already initialized");
         }
+        this.storageHandler = storageHandler;
+        var localStoragePath = storageHandler.getLocalStoragePath();
+        this.rootIndexUuid = initRootIndex(localStoragePath);
+        logger.info("Engine initialized with storage path: " + localStoragePath);
+        initialized = true;
     }
 
-    public static Engine getInstance() {
-        if (instance == null) {
-            throw new IllegalStateException("Engine is not initialized");
+    private @NotNull UUID initRootIndex(@NotNull Path storagePath) {
+        var rootIndexPath = storagePath.resolve("rootIndex.id");
+        if (!rootIndexPath.toFile().exists()) {
+            logger.info("Did not find root index pointer; assuming empty storage. Initializing...");
+            try {
+                var rootIndex = new Index("Root", "Collection of all existing notes and indexes");
+                var rootIndexUuid = rootIndex.getUuid();
+                Files.writeString(rootIndexPath, rootIndexUuid.toString());
+                indexCache.put(rootIndexUuid, rootIndex);
+                storageHandler.writeIndex(rootIndex);
+                return rootIndexUuid;
+            } catch (Exception e) {
+                throw new RuntimeException("Failed to create root index file: " + rootIndexPath, e);
+            }
+        } else {
+            try {
+                var rootIndexUuid = UUID.fromString(Files.readString(rootIndexPath));
+                logger.info("Found root index pointer: " + rootIndexUuid);
+                return rootIndexUuid;
+            } catch (Exception e) {
+                throw new RuntimeException("Failed to determine root index UUID from " + rootIndexPath, e);
+            }
         }
-        return instance;
     }
 
     /**
@@ -157,6 +185,26 @@ public class Engine {
         storageHandler.writeIndex(index);
         getRootIndex().addEntry(index);
         saveRootIndex();
+    }
+
+    public List<UUIO> getEntriesIn(@NotNull Index index) {
+        return index.getEntriesUuid().stream()
+                .map(this::get)
+                .toList();
+    }
+
+    public List<Note> getNotesIn(@NotNull Index index) {
+        return getEntriesIn(index).stream()
+                .filter(Note.class::isInstance)
+                .map(Note.class::cast)
+                .toList();
+    }
+
+    public List<Index> getIndexesIn(@NotNull Index index) {
+        return getEntriesIn(index).stream()
+                .filter(Index.class::isInstance)
+                .map(Index.class::cast)
+                .toList();
     }
 
     public void saveIndex(@NotNull UUID indexUuid) {

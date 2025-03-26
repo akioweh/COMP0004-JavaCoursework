@@ -47,3 +47,11 @@ function newIndex() {
 function getContextPath() {
     return window.contextPath || '';
 }
+
+/**
+ * iframe auto-resize function
+ * @param obj
+ */
+function resizeIframe(obj) {
+    obj.style.height = obj.contentWindow.document.documentElement.scrollHeight + 'px';
+}

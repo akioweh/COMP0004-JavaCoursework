@@ -5,8 +5,8 @@
 
 <form onsubmit="updateElement(event, '${noteUuid}', '${element.uuid}')" class="element-edit-form">
     <div class="form-group">
-        <label for="uri">URL:</label>
-        <input type="url" id="uri" name="uri" value="${element.uri}" class="form-control" required>
+        <label for="url">URL:</label>
+        <input type="url" id="url" name="url" value="${element.uri}" class="form-control" required>
     </div>
     <div class="form-group">
         <label for="displayText">Display Text:</label>

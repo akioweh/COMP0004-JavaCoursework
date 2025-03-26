@@ -1,7 +1,3 @@
-<%--
-  Author: akioweh
-  24/03/2025 1:32 am
---%>
 <%@ page import="com.akioweh.comp0004javacoursework.engine.Engine" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
@@ -19,7 +15,7 @@
     <div class="main">
         <h2>Pinned</h2>
         <ol>
-            <c:set var="pinnedNotes" value="${Engine.getInstance().rootIndex.notes.stream().filter(note -> note.tags.contains('pinned')).toList()}" />
+            <c:set var="pinnedNotes" value="${engine.getNotesIn(engine.rootIndex).stream().filter(note -> note.tags.contains('pinned')).toList()}" />
             <c:forEach var="note" items="${pinnedNotes}">
             <li>
                 <a href="note/${note.uuid}">

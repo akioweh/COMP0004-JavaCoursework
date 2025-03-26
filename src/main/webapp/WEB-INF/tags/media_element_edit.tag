@@ -13,8 +13,8 @@
         </select>
     </div>
     <div class="form-group">
-        <label for="uri">URL:</label>
-        <input type="url" id="uri" name="uri" value="${element.uri}" class="form-control" required>
+        <label for="url">URL:</label>
+        <input type="url" id="url" name="url" value="${element.uri}" class="form-control" required>
     </div>
     <div class="form-group">
         <label for="displayText">Caption/Alt Text:</label>
@@ -30,17 +30,18 @@
     // Preview functionality
     document.addEventListener('DOMContentLoaded', function() {
         const mediaTypeSelect = document.getElementById('mediaType');
-        const uriInput = document.getElementById('uri');
+        const urlInput = document.getElementById('url');
         const previewContainer = document.createElement('div');
         previewContainer.className = 'media-preview';
-        previewContainer.innerHTML = '<h4>Preview</h4><div id="preview-content"></div>';
+        previewContainer.innerHTML = '<h4>Live Preview</h4><div id="preview-content"></div>';
 
         const form = document.querySelector('.element-edit-form');
         form.appendChild(previewContainer);
 
         function updatePreview() {
+            console.log("[DEBUG_LOG] Updating preview with URL:", urlInput.value);
             const mediaType = mediaTypeSelect.value;
-            const uri = uriInput.value;
+            const uri = urlInput.value;
             const previewContent = document.getElementById('preview-content');
 
             if (!uri) {
@@ -63,8 +64,14 @@
             }
         }
 
+        // Use both input and keyup events to ensure maximum compatibility
         mediaTypeSelect.addEventListener('change', updatePreview);
-        uriInput.addEventListener('input', updatePreview);
+        urlInput.addEventListener('input', updatePreview);
+        urlInput.addEventListener('keyup', updatePreview);
+        urlInput.addEventListener('paste', function() {
+            // Use setTimeout to ensure the paste operation completes
+            setTimeout(updatePreview, 10);
+        });
 
         // Initial preview
         updatePreview();
