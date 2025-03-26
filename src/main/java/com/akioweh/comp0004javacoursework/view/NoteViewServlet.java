@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.UUID;
 
+
 /**
  * Servlet for rendering notes.
  * This servlet handles the view-related aspects of notes,

@@ -7,7 +7,6 @@ import com.akioweh.comp0004javacoursework.models.Note;
 import com.akioweh.comp0004javacoursework.models.NoteElement;
 import com.akioweh.comp0004javacoursework.models.TextElement;
 import com.akioweh.comp0004javacoursework.util.Util;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -103,7 +102,7 @@ public class ElementApiServlet extends ApiServlet {
 
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Object[] noteAndElement = getNoteAndElement(request, response, false);
         if (noteAndElement == null) {
             return;
@@ -134,12 +133,7 @@ public class ElementApiServlet extends ApiServlet {
     }
 
     @Override
-    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Debug logging to see what parameters are being received
-        logger.info("[DEBUG_LOG] ElementApiServlet.doPut: Request parameters:");
-        request.getParameterMap().forEach((key, value) ->
-                logger.info("[DEBUG_LOG] " + key + " = " + String.join(", ", value))
-        );
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         Object[] noteAndElement = getNoteAndElement(request, response, true);
         if (noteAndElement == null) {
@@ -169,7 +163,7 @@ public class ElementApiServlet extends ApiServlet {
     }
 
     @Override
-    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Object[] noteAndElement = getNoteAndElement(request, response, true);
         if (noteAndElement == null) {
             return;

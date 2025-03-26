@@ -3,7 +3,6 @@ package com.akioweh.comp0004javacoursework.engine;
 import com.akioweh.comp0004javacoursework.models.Index;
 import com.akioweh.comp0004javacoursework.models.Note;
 import com.akioweh.comp0004javacoursework.models.UUIO;
-import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.inject.Singleton;
@@ -45,8 +44,8 @@ class StorageHandler implements Serializable {
 
     /**
      * Constructor for StorageHandler.
-     * 
-     * @param localStoragePath Path to store serialized objects
+     *
+     * @param localStoragePath      Path to store serialized objects
      * @param localMediaStoragePath Path to store media files
      */
     @Inject
@@ -71,7 +70,7 @@ class StorageHandler implements Serializable {
 
     /**
      * Reads a UUIO object from disk.
-     * 
+     *
      * @param uuid UUID of the object to read
      * @return The object, or null if not found or error
      */
@@ -94,30 +93,25 @@ class StorageHandler implements Serializable {
 
     /**
      * Writes a UUIO object to disk.
-     * 
+     *
      * @param data The object to write
      */
     void write(@NotNull UUIO data) {
         String fileName = data.getUuid() + ".ser";
         Path filePath = localStoragePath.resolve(fileName);
 
-        logger.info("[DEBUG_LOG] StorageHandler.write: Writing data with UUID " + data.getUuid());
-        logger.info("[DEBUG_LOG] StorageHandler.write: File path: " + filePath);
-        logger.info("[DEBUG_LOG] StorageHandler.write: Data type: " + data.getClass().getSimpleName());
 
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filePath.toFile()))) {
             oos.writeObject(data);
-            logger.info("[DEBUG_LOG] StorageHandler.write: Data written successfully");
         } catch (IOException e) {
             logger.severe("Failed to write data file: " + filePath);
             logger.log(Level.SEVERE, e.getMessage(), e);
-            logger.info("[DEBUG_LOG] StorageHandler.write: Failed to write data: " + e.getMessage());
         }
     }
 
     /**
      * Deletes a UUIO object from disk.
-     * 
+     *
      * @param uuid UUID of the object to delete
      */
     void delete(@NotNull UUID uuid) {
@@ -134,7 +128,7 @@ class StorageHandler implements Serializable {
 
     /**
      * Checks if a UUIO object exists on disk.
-     * 
+     *
      * @param uuid UUID of the object to check
      * @return true if the object exists, false otherwise
      */
@@ -146,7 +140,7 @@ class StorageHandler implements Serializable {
 
     /**
      * Reads a Note object from disk.
-     * 
+     *
      * @param uuid UUID of the note to read
      * @return The note, or null if not found or error
      */
@@ -156,7 +150,7 @@ class StorageHandler implements Serializable {
 
     /**
      * Writes a Note object to disk.
-     * 
+     *
      * @param note The note to write
      */
     void writeNote(@NotNull Note note) {
@@ -165,7 +159,7 @@ class StorageHandler implements Serializable {
 
     /**
      * Deletes a Note object from disk.
-     * 
+     *
      * @param uuid UUID of the note to delete
      */
     void deleteNote(@NotNull UUID uuid) {
@@ -174,7 +168,7 @@ class StorageHandler implements Serializable {
 
     /**
      * Reads an Index object from disk.
-     * 
+     *
      * @param uuid UUID of the index to read
      * @return The index, or null if not found or error
      */
@@ -184,7 +178,7 @@ class StorageHandler implements Serializable {
 
     /**
      * Writes an Index object to disk.
-     * 
+     *
      * @param index The index to write
      */
     void writeIndex(@NotNull Index index) {
@@ -193,7 +187,7 @@ class StorageHandler implements Serializable {
 
     /**
      * Deletes an Index object from disk.
-     * 
+     *
      * @param uuid UUID of the index to delete
      */
     void deleteIndex(@NotNull UUID uuid) {

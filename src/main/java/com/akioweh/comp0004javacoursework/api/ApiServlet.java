@@ -3,16 +3,15 @@ package com.akioweh.comp0004javacoursework.api;
 import com.akioweh.comp0004javacoursework.engine.Engine;
 import com.akioweh.comp0004javacoursework.util.Util;
 import jakarta.inject.Inject;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.UUID;
 import java.util.logging.Logger;
+
 
 /**
  * Base class for all API servlets.
@@ -42,7 +41,7 @@ public abstract class ApiServlet extends HttpServlet {
      * Sends a bad request error response with the specified message.
      *
      * @param response The HTTP response
-     * @param message The error message
+     * @param message  The error message
      * @throws IOException If an I/O error occurs
      */
     protected void sendBadRequest(HttpServletResponse response, String message) throws IOException {
@@ -54,7 +53,7 @@ public abstract class ApiServlet extends HttpServlet {
      * Sends a not found error response with the specified message.
      *
      * @param response The HTTP response
-     * @param message The error message
+     * @param message  The error message
      * @throws IOException If an I/O error occurs
      */
     protected void sendNotFound(HttpServletResponse response, String message) throws IOException {
@@ -66,7 +65,7 @@ public abstract class ApiServlet extends HttpServlet {
      * Sends a success response with the specified message.
      *
      * @param response The HTTP response
-     * @param message The success message
+     * @param message  The success message
      * @throws IOException If an I/O error occurs
      */
     protected void sendSuccess(HttpServletResponse response, String message) throws IOException {
@@ -77,9 +76,9 @@ public abstract class ApiServlet extends HttpServlet {
     /**
      * Sends a redirect response to the specified URL.
      *
-     * @param request The HTTP request
+     * @param request  The HTTP request
      * @param response The HTTP response
-     * @param path The path to redirect to
+     * @param path     The path to redirect to
      * @throws IOException If an I/O error occurs
      */
     protected void sendRedirect(HttpServletRequest request, HttpServletResponse response, String path) throws IOException {

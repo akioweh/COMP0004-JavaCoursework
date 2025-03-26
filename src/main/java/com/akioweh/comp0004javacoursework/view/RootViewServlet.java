@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
+
 /**
  * Servlet for rendering the home page.
  * This servlet simply forwards to the index.jsp page.

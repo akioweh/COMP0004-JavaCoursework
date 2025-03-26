@@ -1,20 +1,17 @@
 package com.akioweh.comp0004javacoursework.api;
 
-import com.akioweh.comp0004javacoursework.engine.Engine;
 import com.akioweh.comp0004javacoursework.models.Index;
 import com.akioweh.comp0004javacoursework.models.UUIO;
 import com.akioweh.comp0004javacoursework.util.Util;
-import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.Date;
 import java.util.UUID;
+
 
 /**
  * API servlet for handling index operations.
@@ -23,30 +20,17 @@ import java.util.UUID;
  * - POST: Create a new index
  * - PUT: Update an existing index
  * - DELETE: Delete an index
- * 
+ * <p>
  * Path format: /api/index/{indexUuid}
  * For operations on entries, use the path format: /api/index/{indexUuid}/entry/{entryUuid}
  */
 @WebServlet(name = "Index API", urlPatterns = {"/api/index/*", "/api/index/entry/*"})
 public class IndexApiServlet extends ApiServlet {
-    /**
-     * Renders an index by forwarding to the index view servlet.
-     *
-     * @param request The HTTP request
-     * @param response The HTTP response
-     * @param uuid The UUID of the index to render
-     * @throws ServletException If a servlet error occurs
-     * @throws IOException If an I/O error occurs
-     */
-    public static void renderIndex(HttpServletRequest request, HttpServletResponse response, @NotNull UUID uuid) throws ServletException, IOException {
-        // Forward to the index view servlet instead of duplicating rendering logic
-        request.getRequestDispatcher("/index/" + uuid).forward(request, response);
-    }
 
     /**
      * Parses the index UUID and entry UUID from the path info.
      * The path info is expected to be in the format "/{indexUuid}" or "/{indexUuid}/entry/{entryUuid}".
-     * 
+     *
      * @param request The HTTP request
      * @return An array containing the index UUID and entry UUID (may be null), or null if the path info is invalid
      */
@@ -69,19 +53,19 @@ public class IndexApiServlet extends ApiServlet {
         // Check if this is an entry operation
         if (parts.length >= 3 && "entry".equals(parts[1])) {
             UUID entryUuid = Util.parseUUID(parts[2]);
-            return new UUID[] { indexUuid, entryUuid };
+            return new UUID[]{indexUuid, entryUuid};
         }
 
-        return new UUID[] { indexUuid, null };
+        return new UUID[]{indexUuid, null};
     }
 
     /**
      * Gets the index and entry from the path info.
-     * 
-     * @param request The HTTP request
-     * @param response The HTTP response
+     *
+     * @param request      The HTTP request
+     * @param response     The HTTP response
      * @param requireEntry Whether the entry is required
-     * @return An array containing the index and entry (may be null)
+     * @return An array containing the index and entry (nullable)
      * @throws IOException If an I/O error occurs
      */
     protected Object[] getIndexAndEntry(HttpServletRequest request, HttpServletResponse response, boolean requireEntry) throws IOException {
@@ -111,7 +95,7 @@ public class IndexApiServlet extends ApiServlet {
             return null;
         }
 
-        return new Object[] { index, entry };
+        return new Object[]{index, entry};
     }
 
     @Override
@@ -156,11 +140,8 @@ public class IndexApiServlet extends ApiServlet {
             return;
         }
 
-        UUID indexUuid = uuids[0];
-        UUID entryUuid = uuids[1];
-
         // If we have an index UUID but no entry UUID, it's an error
-        if (entryUuid == null) {
+        if (uuids[1] == null) {
             sendBadRequest(response, "Entry UUID is required for adding entries");
             return;
         }
@@ -183,11 +164,6 @@ public class IndexApiServlet extends ApiServlet {
 
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        // Debug logging to see what parameters are being received
-        logger.info("[DEBUG_LOG] IndexApiServlet.doPut: Request parameters:");
-        request.getParameterMap().forEach((key, value) -> 
-            logger.info("[DEBUG_LOG] " + key + " = " + String.join(", ", value))
-        );
 
         Object[] indexAndEntry = getIndexAndEntry(request, response, false);
         if (indexAndEntry == null) {

@@ -13,11 +13,6 @@ function updateElement(event, noteUuid, elementUuid) {
     const form = event.target;
     const formData = new FormData(form);
 
-    // Debug logging to see what data is being sent
-    console.log("[DEBUG_LOG] updateElement: Form data:");
-    for (const [key, value] of formData.entries()) {
-        console.log("[DEBUG_LOG] " + key + " = " + value);
-    }
 
     // Convert FormData to URLSearchParams manually for better browser compatibility
     const params = new URLSearchParams();
@@ -25,12 +20,8 @@ function updateElement(event, noteUuid, elementUuid) {
         params.append(key, value.toString());
     }
 
-    // Debug logging to see the actual request being sent
     const url = getContextPath() + '/api/element/' + noteUuid + '/' + elementUuid;
     const requestBody = params.toString();
-    console.log("[DEBUG_LOG] updateElement: Sending request to URL:", url);
-    console.log("[DEBUG_LOG] updateElement: Request method: PUT");
-    console.log("[DEBUG_LOG] updateElement: Request body:", requestBody);
 
     // send PUT request to update element
     fetch(url, {
@@ -40,22 +31,15 @@ function updateElement(event, noteUuid, elementUuid) {
         },
         body: requestBody
     }).then(response => {
-        console.log("[DEBUG_LOG] updateElement: Response status:", response.status);
-        console.log("[DEBUG_LOG] updateElement: Response status text:", response.statusText);
-
         if (response.ok) {
-            console.log("[DEBUG_LOG] updateElement: Response OK, reloading page");
             // reload the page to see the changes, with cache-busting parameter
             location.href = location.href.split('?')[0] + '?t=' + new Date().getTime();
         } else {
-            console.log("[DEBUG_LOG] updateElement: Response not OK");
             response.text().then(text => {
-                console.log("[DEBUG_LOG] updateElement: Error text:", text);
                 alert('Error: ' + text);
             });
         }
     }).catch(error => {
-        console.log("[DEBUG_LOG] updateElement: Fetch error:", error);
     });
 }
 
@@ -161,11 +145,6 @@ function updateNote(event) {
     const form = document.getElementById('edit-note-form');
     const formData = new FormData(form);
 
-    // Debug logging to see what data is being sent
-    console.log("[DEBUG_LOG] updateNote: Form data:");
-    for (const [key, value] of formData.entries()) {
-        console.log("[DEBUG_LOG] " + key + " = " + value);
-    }
 
     // Convert FormData to URLSearchParams manually for better browser compatibility
     const params = new URLSearchParams();
@@ -173,12 +152,8 @@ function updateNote(event) {
         params.append(key, value.toString());
     }
 
-    // Debug logging to see the actual request being sent
     const url = getContextPath() + '/api/note/' + noteUuid;
     const requestBody = params.toString();
-    console.log("[DEBUG_LOG] updateNote: Sending request to URL:", url);
-    console.log("[DEBUG_LOG] updateNote: Request method: PUT");
-    console.log("[DEBUG_LOG] updateNote: Request body:", requestBody);
 
     // send PUT request to update note
     fetch(url, {
@@ -188,21 +163,14 @@ function updateNote(event) {
         },
         body: requestBody
     }).then(response => {
-        console.log("[DEBUG_LOG] updateNote: Response status:", response.status);
-        console.log("[DEBUG_LOG] updateNote: Response status text:", response.statusText);
-
         if (response.ok) {
-            console.log("[DEBUG_LOG] updateNote: Response OK, reloading page");
             // reload the page to see the changes, with cache-busting parameter
             location.href = location.href.split('?')[0] + '?t=' + new Date().getTime();
         } else {
-            console.log("[DEBUG_LOG] updateNote: Response not OK");
             response.text().then(text => {
-                console.log("[DEBUG_LOG] updateNote: Error text:", text);
                 alert('Error: ' + text);
             });
         }
     }).catch(error => {
-        console.log("[DEBUG_LOG] updateNote: Fetch error:", error);
     });
 }

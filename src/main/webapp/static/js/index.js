@@ -70,11 +70,6 @@ function updateIndex(event) {
     const form = document.getElementById('edit-index-form');
     const formData = new FormData(form);
 
-    // Debug logging to see what data is being sent
-    console.log("[DEBUG_LOG] updateIndex: Form data:");
-    for (const [key, value] of formData.entries()) {
-        console.log("[DEBUG_LOG] " + key + " = " + value);
-    }
 
     // Convert FormData to URLSearchParams manually for better browser compatibility
     const params = new URLSearchParams();
@@ -82,12 +77,8 @@ function updateIndex(event) {
         params.append(key, value.toString());
     }
 
-    // Debug logging to see the actual request being sent
     const url = getContextPath() + '/api/index/' + indexUuid;
     const requestBody = params.toString();
-    console.log("[DEBUG_LOG] updateIndex: Sending request to URL:", url);
-    console.log("[DEBUG_LOG] updateIndex: Request method: PUT");
-    console.log("[DEBUG_LOG] updateIndex: Request body:", requestBody);
 
     // send PUT request to update index
     fetch(url, {
@@ -97,21 +88,14 @@ function updateIndex(event) {
         },
         body: requestBody
     }).then(response => {
-        console.log("[DEBUG_LOG] updateIndex: Response status:", response.status);
-        console.log("[DEBUG_LOG] updateIndex: Response status text:", response.statusText);
-
         if (response.ok) {
-            console.log("[DEBUG_LOG] updateIndex: Response OK, reloading page");
             // reload the page to see the changes, with cache-busting parameter
             location.href = location.href.split('?')[0] + '?t=' + new Date().getTime();
         } else {
-            console.log("[DEBUG_LOG] updateIndex: Response not OK");
             response.text().then(text => {
-                console.log("[DEBUG_LOG] updateIndex: Error text:", text);
                 alert('Error: ' + text);
             });
         }
     }).catch(error => {
-        console.log("[DEBUG_LOG] updateIndex: Fetch error:", error);
     });
 }

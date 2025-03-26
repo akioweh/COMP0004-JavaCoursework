@@ -1,7 +1,5 @@
 package com.akioweh.comp0004javacoursework.models;
 
-import com.akioweh.comp0004javacoursework.engine.Engine;
-import jakarta.inject.Inject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnmodifiableView;
 

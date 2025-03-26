@@ -3,8 +3,6 @@ package com.akioweh.comp0004javacoursework.engine;
 import com.akioweh.comp0004javacoursework.models.Index;
 import com.akioweh.comp0004javacoursework.models.Note;
 import com.akioweh.comp0004javacoursework.models.UUIO;
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.inject.Singleton;

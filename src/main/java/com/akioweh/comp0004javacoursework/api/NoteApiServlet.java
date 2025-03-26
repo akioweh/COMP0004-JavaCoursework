@@ -1,19 +1,17 @@
 package com.akioweh.comp0004javacoursework.api;
 
-import com.akioweh.comp0004javacoursework.engine.Engine;
 import com.akioweh.comp0004javacoursework.models.Note;
-import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
 
 /**
  * API servlet for handling note operations.
@@ -40,7 +38,7 @@ public class NoteApiServlet extends ApiServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         // Create a new note
         Note newNote = new Note();
         String title = request.getParameter("title");
@@ -71,12 +69,7 @@ public class NoteApiServlet extends ApiServlet {
     }
 
     @Override
-    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Debug logging to see what parameters are being received
-        logger.info("[DEBUG_LOG] NoteApiServlet.doPut: Request parameters:");
-        request.getParameterMap().forEach((key, value) -> 
-            logger.info("[DEBUG_LOG] " + key + " = " + String.join(", ", value))
-        );
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         UUID uuid = getUuidFromPath(request);
         if (uuid == null) {
@@ -113,7 +106,7 @@ public class NoteApiServlet extends ApiServlet {
     }
 
     @Override
-    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
         UUID uuid = getUuidFromPath(request);
         if (uuid == null) {
             sendBadRequest(response, "Note UUID is required");

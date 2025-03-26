@@ -15,7 +15,6 @@ import jakarta.servlet.http.HttpServletRequestWrapper;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
@@ -25,6 +24,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
+
 
 /**
  * Filter that processes PUT requests to make form data available through the getParameter methods.
@@ -39,7 +39,7 @@ public class PutRequestFilter implements Filter {
     private static final Logger logger = Logger.getLogger(PutRequestFilter.class.getName());
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
+    public void init(FilterConfig filterConfig) {
         // No initialization needed
     }
 
@@ -53,7 +53,6 @@ public class PutRequestFilter implements Filter {
             if ("PUT".equalsIgnoreCase(method) && contentType != null && contentType.contains("application/x-www-form-urlencoded")) {
                 // Wrap the request to provide access to form parameters
                 request = new PutRequestWrapper(httpRequest);
-                logger.info("[DEBUG_LOG] PutRequestFilter: Wrapped PUT request to provide access to form parameters");
             }
         }
 
@@ -81,11 +80,6 @@ public class PutRequestFilter implements Filter {
             // Parse the request body as form data
             parameterMap = parseFormData(new String(requestBody, StandardCharsets.UTF_8));
 
-            // Log the parsed parameters
-            logger.info("[DEBUG_LOG] PutRequestWrapper: Parsed parameters:");
-            parameterMap.forEach((key, values) -> 
-                logger.info("[DEBUG_LOG] " + key + " = " + String.join(", ", values))
-            );
         }
 
         @Override
@@ -110,12 +104,12 @@ public class PutRequestFilter implements Filter {
         }
 
         @Override
-        public ServletInputStream getInputStream() throws IOException {
+        public ServletInputStream getInputStream() {
             return new ServletInputStream() {
                 private final ByteArrayInputStream inputStream = new ByteArrayInputStream(requestBody);
 
                 @Override
-                public int read() throws IOException {
+                public int read() {
                     return inputStream.read();
                 }
 
@@ -137,7 +131,7 @@ public class PutRequestFilter implements Filter {
         }
 
         @Override
-        public BufferedReader getReader() throws IOException {
+        public BufferedReader getReader() {
             return new BufferedReader(new InputStreamReader(getInputStream(), StandardCharsets.UTF_8));
         }
 

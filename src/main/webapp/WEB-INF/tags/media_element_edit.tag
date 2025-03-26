@@ -39,7 +39,6 @@
         form.appendChild(previewContainer);
 
         function updatePreview() {
-            console.log("[DEBUG_LOG] Updating preview with URL:", urlInput.value);
             const mediaType = mediaTypeSelect.value;
             const uri = urlInput.value;
             const previewContent = document.getElementById('preview-content');
