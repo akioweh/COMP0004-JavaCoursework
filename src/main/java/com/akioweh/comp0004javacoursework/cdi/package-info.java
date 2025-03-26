@@ -1,4 +1,4 @@
 /**
  * Mainly contains Dependency Producers for CDI managed beans.
  */
-package cdi;
+package com.akioweh.comp0004javacoursework.cdi;

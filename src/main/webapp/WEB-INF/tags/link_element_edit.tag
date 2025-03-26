@@ -6,7 +6,10 @@
 <form onsubmit="updateElement(event, '${noteUuid}', '${element.uuid}')" class="element-edit-form">
     <div class="form-group">
         <label for="url">URL:</label>
-        <input type="url" id="url" name="url" value="${element.uri}" class="form-control" required>
+        <input type="text" id="url" name="url" value="${element.uri}" class="form-control" required>
+        <small class="form-text text-muted">
+            You can use relative URLs, absolute URLs, or even cross-link notes by simply copying their URL.
+        </small>
     </div>
     <div class="form-group">
         <label for="displayText">Display Text:</label>

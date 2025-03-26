@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -51,11 +52,7 @@ public class NoteApiServlet extends ApiServlet {
             newNote.setTitle("New Note");
         }
 
-        if (brief != null) {
-            newNote.setBrief(brief);
-        } else {
-            newNote.setBrief("New Note on " + newNote.getCreated());
-        }
+        newNote.setBrief(Objects.requireNonNullElseGet(brief, () -> "New Note on " + newNote.getCreated()));
 
         if (tags != null && !tags.isEmpty()) {
             var tagSet = new HashSet<>(Arrays.asList(tags.split(",")));

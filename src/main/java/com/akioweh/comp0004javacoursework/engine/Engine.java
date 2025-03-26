@@ -8,6 +8,8 @@ import jakarta.inject.Named;
 import jakarta.inject.Singleton;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -244,5 +246,67 @@ public class Engine implements Serializable {
     public void saveAll() {
         noteCache.values().forEach(storageHandler::writeNote);
         indexCache.values().forEach(storageHandler::writeIndex);
+    }
+
+    /**
+     * Saves a media file to the local media storage.
+     *
+     * @param fileName The name to save the file as
+     * @param inputStream The input stream of the file to save
+     * @return The name of the saved file
+     * @throws IOException If an I/O error occurs
+     */
+    public String saveMediaFile(String fileName, InputStream inputStream) throws IOException {
+        return storageHandler.saveMediaFile(fileName, inputStream);
+    }
+
+    /**
+     * Lists all files in the local media storage.
+     *
+     * @return List of filenames in the local media storage
+     * @throws IOException If an I/O error occurs
+     */
+    public List<String> listMediaFiles() throws IOException {
+        return storageHandler.listMediaFiles();
+    }
+
+    /**
+     * Deletes a file from the local media storage.
+     *
+     * @param fileName The name of the file to delete
+     * @return true if the file was deleted, false otherwise
+     * @throws IOException If an I/O error occurs
+     */
+    public boolean deleteMediaFile(String fileName) throws IOException {
+        return storageHandler.deleteMediaFile(fileName);
+    }
+
+    /**
+     * Checks if a file exists in the local media storage.
+     *
+     * @param fileName The name of the file to check
+     * @return true if the file exists, false otherwise
+     */
+    public boolean mediaFileExists(String fileName) {
+        return storageHandler.mediaFileExists(fileName);
+    }
+
+    /**
+     * Gets the URL for a media file.
+     *
+     * @param fileName The name of the file
+     * @return The URL for the media file
+     */
+    public String getMediaFileUrl(String fileName) {
+        return "/media/" + fileName;
+    }
+
+    /**
+     * Gets the path to the local media storage directory.
+     *
+     * @return Path to the local media storage directory
+     */
+    public Path getLocalMediaStoragePath() {
+        return storageHandler.getLocalMediaStoragePath();
     }
 }

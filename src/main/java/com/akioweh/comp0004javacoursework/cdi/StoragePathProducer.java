@@ -1,8 +1,7 @@
-package cdi;
+package com.akioweh.comp0004javacoursework.cdi;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Produces;
-import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import org.jetbrains.annotations.NotNull;
 

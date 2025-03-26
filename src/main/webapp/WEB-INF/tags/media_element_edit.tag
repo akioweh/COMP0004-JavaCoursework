@@ -14,7 +14,11 @@
     </div>
     <div class="form-group">
         <label for="url">URL:</label>
-        <input type="url" id="url" name="url" value="${element.uri}" class="form-control" required>
+        <input type="text" id="url" name="url" value="${element.uri}" class="form-control" required>
+        <small class="form-text text-muted">
+            Need to use your own media files? <a href="${pageContext.request.contextPath}/media-browser" target="_blank">Upload files</a> first, then copy the link here.
+            You can use relative URLs (e.g., /media/image.jpg) or absolute URLs (e.g., https://example.com/image.jpg).
+        </small>
     </div>
     <div class="form-group">
         <label for="displayText">Caption/Alt Text:</label>
