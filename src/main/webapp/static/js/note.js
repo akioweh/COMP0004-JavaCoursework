@@ -39,8 +39,7 @@ function updateElement(event, noteUuid, elementUuid) {
                 alert('Error: ' + text);
             });
         }
-    }).catch(error => {
-    });
+    }).catch();
 }
 
 /**
@@ -171,6 +170,5 @@ function updateNote(event) {
                 alert('Error: ' + text);
             });
         }
-    }).catch(error => {
-    });
+    }).catch();
 }

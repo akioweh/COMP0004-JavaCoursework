@@ -96,6 +96,5 @@ function updateIndex(event) {
                 alert('Error: ' + text);
             });
         }
-    }).catch(error => {
-    });
+    }).catch();
 }
